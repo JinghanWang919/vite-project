@@ -1,0 +1,22 @@
+vite-project/
+├─ public/
+│  └─ logo.png
+├─ src/
+│  ├─ assets/
+│  │   └─ project1.jpg
+│  ├─ components/
+│  │   └─ ProjectCard.jsx
+│  ├─ App.jsx
+│  └─ main.jsx
+├─ package.json
+├─ vite.config.js
+
+
+
+src/
+├─ components/
+│   └─ ProjectCard.jsx      ← 每个项目的简要卡片
+├─ pages/
+│   └─ ProjectDetail.jsx    ← 点击后进入的详情页（含视频）
+├─ App.jsx                  ← 首页
+├─ main.jsx

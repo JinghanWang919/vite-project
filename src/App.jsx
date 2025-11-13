@@ -1,45 +1,36 @@
-export default function Portfolio() {
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import ProjectDetail from './pages/ProjectDetail'
+import ProjectCard from './components/ProjectCard'
+
+function HomePage() {
+  const navigate = useNavigate()
   const projects = [
-    {
-      title: "GloSeed 发光种子",
-      description: "环保教育玩具，探索自然与光能互动。",
-      image: "/images/gloseed.jpg",
-    },
-    {
-      title: "Didi 滴滴",
-      description: "儿童水循环教育玩具，培养生态意识。",
-      image: "/images/didi.jpg",
-    },
-    {
-      title: "仓旋大师",
-      description: "智能高效平仓翻粮作业车，面向农业现代化。",
-      image: "/images/cangxuan.jpg",
-    },
-  ];
+    { id: 1, title: '户外露营桌', desc: '便携设计', video: '/videos/eco.mp4' },
+    { id: 2, title: 'LUMENA红光理疗仪', desc: '面向轻疗美容人群的多区红光理疗仪产品设计', video: '/images/didi-detail.jpg' },
+    { id: 3, title: '银龄智联——居家守护中枢', desc: '智能家居机器人设计', video: '/videos/gloseed.mp4' },
+  ]
 
   return (
-    <main className="min-h-screen bg-neutral-50 text-gray-800">
-      <header className="p-6 text-center border-b border-gray-200">
-        <h1 className="text-3xl font-bold tracking-tight">王景馯 · Industrial Design Portfolio</h1>
-        <p className="text-sm text-gray-500 mt-1">Selected Works 2023–2025</p>
-      </header>
-
-      <section className="max-w-5xl mx-auto py-12 px-4 grid gap-10 md:grid-cols-3">
+    <div style={{ padding: '40px', textAlign: 'center' }}>
+      <h1>王景馯 · Portfolio</h1>
+      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
         {projects.map((p) => (
-          <div key={p.title} className="rounded-2xl overflow-hidden shadow-sm hover:shadow-md bg-white transition">
-            <img src={p.image} alt={p.title} className="w-full h-56 object-cover" />
-            <div className="p-4">
-              <h2 className="text-lg font-semibold">{p.title}</h2>
-              <p className="text-sm text-gray-600 mt-1">{p.description}</p>
-            </div>
+          <div key={p.id} onClick={() => navigate(`/project/${p.id}`, { state: p })}>
+            <ProjectCard project={p} />
           </div>
         ))}
-      </section>
-
-      <footer className="text-center text-sm text-gray-500 py-8 border-t border-gray-200">
-        <p>© 2025 王景馯 · Industrial Designer</p>
-        <p className="mt-1">Contact: <a href="mailto:example@email.com" className="underline">example@email.com</a></p>
-      </footer>
-    </main>
-  );
+      </div>
+    </div>
+  )
 }
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/project/:id" element={<ProjectDetail />} />
+    </Routes>
+  )
+}
+
+export default App

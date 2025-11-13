@@ -1,0 +1,115 @@
+好的，以下是你现在这种 **Vite + React + GitHub Pages** 项目结构下，修改成“图文详情页”并成功预览、上传的完整操作教程。非常清晰、按步骤执行即可。
+
+---
+
+## 一、修改项目详情页（以 Didi 项为例）
+
+### 1. 打开项目详情组件文件
+
+路径通常是：
+
+```
+src/pages/ProjectDetail.jsx
+```
+
+### 2. 找到判断项目的代码（一般像这样）
+
+```jsx
+if (id === '1') {
+  return (
+    <div className="project-detail">
+      <h1>Didi 滴滴水循环环保玩具</h1>
+      <video controls src="/videos/didi.mp4" />
+      <p>视频简介文字...</p>
+    </div>
+  );
+}
+```
+
+### 3. 修改为图文详情版（不用视频）
+
+```jsx
+if (id === '1') {
+  return (
+    <div className="project-detail">
+      <h1>Didi 滴滴水循环环保玩具</h1>
+      <img src="/images/didi-1.jpg" alt="Didi 玩具外观" />
+      <p>这是一款以“水循环环保教育”为主题的儿童玩具，旨在让孩子在游戏中理解水资源循环与节约的重要性。</p>
+      <img src="/images/didi-2.jpg" alt="Didi 结构展示" />
+      <p>产品采用安全环保材料，通过转动、浇水等交互模拟自然水循环过程。</p>
+    </div>
+  );
+}
+```
+
+> ⚠️ 图片路径对应放在：`public/images/` 文件夹中
+> 比如 `public/images/didi-1.jpg`、`public/images/didi-2.jpg`
+
+---
+
+## 二、本地预览
+
+### 1. 启动本地服务器
+
+在项目根目录执行：
+
+```bash
+npm run dev
+```
+
+### 2. 访问地址
+
+浏览器打开：
+
+```
+http://localhost:5173/
+```
+
+> 如果你设置了 `base: "/vite-project/"`，那路径可能是
+> `http://localhost:5173/vite-project/`
+
+现在点开 Didi 卡片，应该能看到图文详情。
+
+---
+
+## 三、打包上传到 GitHub Pages
+
+### 1. 打包生成静态文件
+
+```bash
+npm run build
+```
+
+这会在项目目录生成一个 **dist/** 文件夹。
+
+### 2. 推送到 GitHub
+
+如果你已经配置了 GitHub 仓库和 Pages：
+
+```bash
+git add .
+git commit -m "update Didi to image-text version"
+git push origin main
+```
+
+GitHub Actions 或 Pages 会自动部署。
+几分钟后访问：
+
+```
+https://jinghanwang919.github.io/vite-project/
+```
+
+即可看到更新后的页面。
+
+---
+
+## 四、如果想改其他项目
+
+1. 同样在 `ProjectDetail.jsx` 中复制一份新的 `if (id === '2')` 等分支；
+2. 修改标题、图片、文字；
+3. 添加对应的图片到 `/public/images/`；
+4. 本地测试、打包、上传。
+
+---
+
+是否需要我帮你把 `ProjectDetail.jsx` 模板优化成一个可复用的格式（只要在一个地方填内容，不用每次都写 if 判断）？这样你后续加项目会更方便。
