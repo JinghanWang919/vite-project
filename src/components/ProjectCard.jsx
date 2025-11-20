@@ -1,6 +1,7 @@
 import React from 'react';
 import './ProjectCard.css'; // 引入上面的 CSS
 
+const base = import.meta.env.BASE_URL;
 const ProjectCard = ({ project, onClick }) => {
   // 简单的逻辑：判断文件后缀是不是 mp4
   const isVideo = project.video && project.video.endsWith('.mp4');
@@ -20,7 +21,7 @@ const ProjectCard = ({ project, onClick }) => {
             onMouseOut={e => e.target.pause()} // 移开暂停(可选)
           />
         ) : (
-          <img src={project.video} alt={project.title} />
+          <img src={base + project.video} alt={project.title} />
         )}
       </div>
 
