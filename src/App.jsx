@@ -21,11 +21,12 @@ function HomePage() {
     // 其他项目：钛金灰（深一点的中性灰），代表稳重
     other: '#e0e0e0'
   }
+const base = import.meta.env.BASE_URL;
 
-  const projects = [
-    { id: 1, title: '户外露营桌', desc: '便携设计与结构创新', video: '/videos/eco.mp4', category: 'course' },
-    { id: 2, title: 'LUMENA红光理疗仪', desc: '面向轻疗美容人群的多区红光理疗仪', video:'/images/red3.png', category: 'other' },
-    { id: 3, title: '银龄智联——居家守护', desc: '智能家居机器人设计', video: '/images/ren4.png', category: 'course' },
+const projects = [
+  { id: 1, title: '户外露营桌', desc: '便携设计与结构创新', video: `${base}videos/eco.mp4`, category: 'course' },
+  { id: 2, title: 'LUMENA红光理疗仪', desc: '面向轻疗美容人群的多区红光理疗仪', video: `${base}images/red3.png`, category: 'other' },
+  { id: 3, title: '银龄智联——居家守护', desc: '智能家居机器人设计', video: `${base}images/ren4.png`, category: 'course' },
     // 你可以继续添加测试数据...
   ]
 
