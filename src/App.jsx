@@ -119,6 +119,8 @@ function HomePage() {
             <span>Contact Me</span>
             <span className="separator">/</span>
             <a href="mailto:halewalker@163.com" className="footer-link">Email: halewalker@163.com</a>
+            <span className="separator">/</span>
+            <span>QQ: 413375678</span>
           </div>
         </footer>
       </div>
