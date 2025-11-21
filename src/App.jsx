@@ -4,11 +4,28 @@ import './App.css'
 import ProjectDetail from './pages/ProjectDetail'
 import ProjectCard from './components/ProjectCard'
 
+// ✅ 辅助函数：专门处理路径拼接，防止双斜杠问题
+const getAssetUrl = (path) => {
+  // 1. 设定基础路径 (仓库名)
+  const repoName = '/vite-project';
+  
+  // 2. 确保 path 是字符串
+  if (!path) return '';
+
+  // 3. 如果 path 已经是 http 开头的网络图片，直接返回
+  if (path.startsWith('http')) return path;
+
+  // 4. 移除 path 开头的斜杠 (如果有)，避免拼成 /vite-project//images...
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+
+  // 5. 返回完整路径
+  return `${repoName}/${cleanPath}`;
+};
+
 function HomePage() {
   const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState('all')
 
-  // 🎨 工业理性色盘定义
   const categoryColors = {
     all: '#f4f4f5', 
     graduation: '#dfe6e9', 
@@ -17,17 +34,30 @@ function HomePage() {
     other: '#e0e0e0'
   }
 
-  // 🔴 核心修复：不再依赖自动识别，直接写死仓库名
-  // 只要你的 GitHub 仓库叫 vite-project，这一行能保证 100% 找到资源
-  // 注意：字符串前后都要有斜杠
-  const base = '/vite-project/'; 
-
+  // ✅ 修改数据源：只写文件名和文件夹，不要自己加前缀，交给 getAssetUrl 处理
   const projects = [
-    // 👇 注意：文件名开头不要加斜杠，避免拼出 //videos
-    { id: 1, title: '户外露营桌', desc: '便携设计与结构创新', video: `${base}videos/eco.mp4`, category: 'course' },
-    { id: 2, title: 'LUMENA红光理疗仪', desc: '面向轻疗美容人群的多区红光理疗仪', video: `${base}images/red3.png`, category: 'other' },
-    { id: 3, title: '银龄智联——居家守护', desc: '智能家居机器人设计', video: `${base}images/ren4.png`, category: 'course' },
-    // ...
+    { 
+      id: 1, 
+      title: '户外露营桌', 
+      desc: '便携设计与结构创新', 
+      // 这里的路径不要加 / 开头
+      video: 'videos/eco.mp4', 
+      category: 'course' 
+    },
+    { 
+      id: 2, 
+      title: 'LUMENA红光理疗仪', 
+      desc: '面向轻疗美容人群的多区红光理疗仪', 
+      video: 'images/red3.png', 
+      category: 'other' 
+    },
+    { 
+      id: 3, 
+      title: '银龄智联——居家守护', 
+      desc: '智能家居机器人设计', 
+      video: 'images/ren4.png', 
+      category: 'course' 
+    },
   ]
 
   const navItems = [
@@ -48,7 +78,6 @@ function HomePage() {
       style={{ backgroundColor: categoryColors[activeCategory] }}
     >
       <div className="container">
-        
         <header className="site-header">
           <h1>王景馯 · Portfolio</h1>
           <p>产品设计 / 交互体验 / 创新原型</p>
@@ -71,7 +100,12 @@ function HomePage() {
             filteredProjects.map((p) => (
               <ProjectCard 
                 key={p.id} 
-                project={p} 
+                // ✅ 这里需要把处理过的 project 对象传下去，或者在 ProjectCard 内部处理
+                // 为了简单起见，我们在这里修改一下传下去的数据
+                project={{
+                    ...p,
+                    video: getAssetUrl(p.video) // 👈 关键：在这里调用函数转换路径
+                }} 
                 onClick={() => navigate(`/project/${p.id}`, { state: p })} 
               />
             ))
@@ -85,11 +119,8 @@ function HomePage() {
             <span>Contact Me</span>
             <span className="separator">/</span>
             <a href="mailto:halewalker@163.com" className="footer-link">Email: halewalker@163.com</a>
-            <span className="separator">/</span>
-            <span>QQ: 413375678</span>
           </div>
         </footer>
-        
       </div>
     </div>
   )

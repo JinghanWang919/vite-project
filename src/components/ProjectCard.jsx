@@ -21,7 +21,7 @@ const ProjectCard = ({ project, onClick }) => {
             onMouseOut={e => e.target.pause()} // 移开暂停(可选)
           />
         ) : (
-          <img src={base + project.video} alt={project.title} />
+          <img src={project.video} alt={project.title} />
         )}
       </div>
 
