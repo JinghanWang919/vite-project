@@ -1,0 +1,28 @@
+name: Deploy Vite to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]  # 监听 main 分支的变动
+
+# 设置权限，允许脚本修改仓库内容（部署到 gh-pages 分支）
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install and Build 🔧
+        run: |
+          npm install
+          npm run build
+        # 这会生成 dist 目录，里面包含构建好的网站
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist      # 部署 dist 文件夹的内容
+          branch: gh-pages  # 推送到 gh-pages 分支
