@@ -10,24 +10,24 @@ function HomePage() {
 
   // 🎨 工业理性色盘定义
   const categoryColors = {
-    // 全部：经典的 UI 灰，冷静、客观
     all: '#f4f4f5', 
-    // 毕业设计：工程蓝灰（类似蓝图或阳极氧化铝），代表专业与深度
     graduation: '#dfe6e9', 
-    // 课程设计：水泥灰绿（类似清水混凝土），代表探索与生长
     course: '#e9ece5', 
-    // 手绘作品：暖陶色/纸张色，代表手作的温度与草图的质感
     sketch: '#f2ebe3', 
-    // 其他项目：钛金灰（深一点的中性灰），代表稳重
     other: '#e0e0e0'
   }
-const base = import.meta.env.BASE_URL;
 
-const projects = [
-  { id: 1, title: '户外露营桌', desc: '便携设计与结构创新', video: `${base}videos/eco.mp4`, category: 'course' },
-  { id: 2, title: 'LUMENA红光理疗仪', desc: '面向轻疗美容人群的多区红光理疗仪', video: `${base}images/red3.png`, category: 'other' },
-  { id: 3, title: '银龄智联——居家守护', desc: '智能家居机器人设计', video: `${base}images/ren4.png`, category: 'course' },
-    // 你可以继续添加测试数据...
+  // 🔴 核心修复：不再依赖自动识别，直接写死仓库名
+  // 只要你的 GitHub 仓库叫 vite-project，这一行能保证 100% 找到资源
+  // 注意：字符串前后都要有斜杠
+  const base = '/vite-project/'; 
+
+  const projects = [
+    // 👇 注意：文件名开头不要加斜杠，避免拼出 //videos
+    { id: 1, title: '户外露营桌', desc: '便携设计与结构创新', video: `${base}videos/eco.mp4`, category: 'course' },
+    { id: 2, title: 'LUMENA红光理疗仪', desc: '面向轻疗美容人群的多区红光理疗仪', video: `${base}images/red3.png`, category: 'other' },
+    { id: 3, title: '银龄智联——居家守护', desc: '智能家居机器人设计', video: `${base}images/ren4.png`, category: 'course' },
+    // ...
   ]
 
   const navItems = [
@@ -43,7 +43,6 @@ const projects = [
     : projects.filter(p => p.category === activeCategory)
 
   return (
-    // 👇 核心修改：最外层加了一个 div，背景色由当前状态决定
     <div 
       className="page-background" 
       style={{ backgroundColor: categoryColors[activeCategory] }}
