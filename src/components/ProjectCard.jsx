@@ -27,40 +27,40 @@ const ProjectCard = ({ project, onClick }) => {
 
 return (
     <article className="editorial-card" onClick={onClick}>
-
-      {/* 1. 媒体区域 (保持不变) */}
-      <div
+      
+      {/* 媒体区域 */}
+      <div 
         className="card-media-wrapper"
-        onMouseEnter={isVideo ? handleMouseEnter : null}
-        onMouseLeave={isVideo ? handleMouseLeave : null}
+        // ...
       >
-        {/* ... (省略媒体代码，保持不变) ... */}
+        {/* 临时调试代码 👇 */}
+        {project.video ? (
+          // 如果 video 路径存在，执行正常的判断
+          isVideo ? (
+            <video 
+              // ...
+            />
+          ) : (
+            <img 
+              src={project.video} 
+              alt={project.title} 
+              className="card-media"
+              loading="lazy"
+            />
+          )
+        ) : (
+           // 否则，显示一个标记，证明路径丢失
+           <div style={{ padding: '20px', textAlign: 'center', color: 'red' }}>
+              Media Path Missing!
+           </div>
+        )}
+        {/* 临时调试代码 👆 */}
+        
+        {/* ... (media-overlay 保持不变) ... */}
+        <div className="media-overlay"></div>
       </div>
 
-      {/* 2. 文字区域 */}
-      <div className="card-content">
-
-        {/* ✅ 修改这里：顶部标签 */}
-        <div className="card-meta">
-          {/* 之前是写死的 <span className="card-category">Product Design</span> */}
-          {/* 现在改为读取数据: */}
-          <span className="card-category">{project.displayCategory}</span>
-
-          {/* 之前是写死的 <span className="card-year">2024</span> */}
-          {/* 现在改为读取数据 (如果有些老项目没有年份，可以用 || 提供个默认值): */}
-          <span className="card-year">{project.year || '202X'}</span>
-        </div>
-
-        <h3 className="card-title">{project.title}</h3>
-
-        {/* 简介 */}
-        <p className="card-desc">{project.desc}</p>
-
-        <div className="card-footer">
-          <span className="read-more">View Project →</span>
-        </div>
-      </div>
-
+      {/* ... (文字区域) ... */}
     </article>
   );
 };
