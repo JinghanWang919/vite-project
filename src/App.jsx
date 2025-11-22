@@ -45,7 +45,6 @@ function HomePage() {
       desc: '便携设计与结构创新',
       video: 'videos/eco.mp4',
       category: 'course', // 这个是用来筛选的内部分类(小写英文)
-      displayCategory: '产品设计',
       year: '2025'
     },
     {
