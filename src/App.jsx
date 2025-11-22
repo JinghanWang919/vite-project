@@ -82,8 +82,8 @@ function HomePage() {
         {/* Header: 杂志风格化 */}
         <header className="site-header">
           <div className="header-top-label">PORTFOLIO 2025</div>
-          <h1 className="main-title">Jan Meschan</h1>
-          <p className="sub-title">Product Design / UX Research / Prototyping</p>
+          <h1 className="main-title">王景馯</h1>
+          <p className="sub-title">工业设计 / 以人为本 / 构想未来</p>
         </header>
 
         {/* Nav: 简约化 */}
