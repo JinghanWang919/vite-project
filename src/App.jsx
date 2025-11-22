@@ -34,45 +34,35 @@ function HomePage() {
     other: '#f5f5f5'
   }
 
- // App.jsx 中 HomePage 组件内
-
-// ... 前面的代码
-
   const projects = [
-    {
-      id: 1,
-      title: '户外露营桌',
-      desc: '便携设计与结构创新',
-      video: 'videos/eco.mp4',
-      category: 'course', // 这个是用来筛选的内部分类(小写英文)
-      year: '2025'
-    },
-    {
-      id: 2,
-      title: 'LUMENA红光理疗仪',
-      desc: '面向轻疗美容人群的多区红光理疗仪',
-      video: 'images/red3.png',
-      category: 'other',
-      // 👇 新增
-      displayCategory: '医疗健康',
-      year: '2025'
-    },
-    {
-      id: 3,
-      title: '银龄智联——居家守护',
-      desc: '智能家居机器人设计',
-      video: 'images/ren4.png',
+    { 
+      id: 1, 
+      title: '户外露营桌', 
+      desc: '便携设计与结构创新', 
+      video: 'videos/eco.mp4', 
       category: 'course',
-      // 👇 新增
-      displayCategory: '产品设计',
+      year: '2025' // 补充数据
+    },
+    { 
+      id: 2, 
+      title: 'LUMENA红光理疗仪', 
+      desc: '面向轻疗美容人群的多区红光理疗仪', 
+      video: 'images/red3.png', 
+      category: 'other',
+      year: '2025'
+    },
+    { 
+      id: 3, 
+      title: '银龄智联——居家守护', 
+      desc: '智能家居机器人设计', 
+      video: 'images/ren4.png', 
+      category: 'course',
       year: '2025'
     },
   ]
 
-// ... 后面的代码
-
   const navItems = [
-    { label: '全部作品', value: 'all' }, // 英文标签显得更高级
+    { label: '全部', value: 'all' }, // 英文标签显得更高级
     { label: '毕业设计', value: 'graduation' },
     { label: '课程作业', value: 'course' },
     { label: '手绘草图', value: 'sketch' },
@@ -92,8 +82,8 @@ function HomePage() {
         {/* Header: 杂志风格化 */}
         <header className="site-header">
           <div className="header-top-label">PORTFOLIO 2025</div>
-          <h1 className="main-title">王景馯</h1>
-          <p className="sub-title">工业设计 / 以人为本 /未来构想 </p>
+          <h1 className="main-title">Jan Meschan</h1>
+          <p className="sub-title">Product Design / UX Research / Prototyping</p>
         </header>
 
         {/* Nav: 简约化 */}
