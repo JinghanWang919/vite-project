@@ -82,7 +82,7 @@ function HomePage() {
         {/* Header: 杂志风格化 */}
         <header className="site-header">
           <div className="header-top-label">PORTFOLIO 2025</div>
-          <h1 className="main-title">Jan Meschan</h1>
+          <h1 className="main-title">王景馯</h1>
           <p className="sub-title">Product Design / UX Research / Prototyping</p>
         </header>
 
@@ -132,7 +132,7 @@ function HomePage() {
           {/* 状态栏 (Status Bar) */}
           <div className="status-bar">
             <div className="status-left">
-              © 2025 Jan Meschan. All Rights Reserved.
+              © 2025 Jinghan Wang. All Rights Reserved.
             </div>
             
             <div className="status-right">
