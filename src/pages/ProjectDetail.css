@@ -1,137 +1,227 @@
-/* src/pages/ProjectDetail.css */
+/* Google Fonts 引入 - 放在 index.html 或者这里 (如果支持) 
+   推荐字体: 'Playfair Display' (衬线体) 和 'Inter' (无衬线体) 
+   这里假设你已经引入了，或者直接用系统字体模拟
+*/
 
-/* 页面容器：详情页通常用纯白底，显得干净专业 */
-.detail-container {
-  background-color: #ffffff;
-  min-height: 100vh;
-  padding-bottom: 80px;
-  animation: fadeIn 0.5s ease-out; /* 页面进入时的淡入动画 */
+:root {
+  --accent-color: #b01564; /* 截图左侧那个紫红色 */
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --bg-color: #ffffff;
+  --gray-bg: #f4f4f4; /* 图片的浅灰背景 */
 }
 
-/* 顶部导航条 */
-.detail-nav {
-  max-width: 1200px;
+.editorial-layout {
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 30px 20px;
-  display: flex;
-  align-items: center;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* 返回按钮：极简风格 */
-.back-btn {
+/* 1. Back Nav */
+.back-nav-container {
+  padding: 20px 40px;
+}
+
+.text-link-btn {
   background: none;
   border: none;
-  font-size: 1rem;
-  color: #666;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-  transition: color 0.3s, transform 0.3s;
-}
-
-.back-btn:hover {
-  color: #000;
-  transform: translateX(-5px); /* 悬停时向左动一点点，提示“回去” */
-}
-
-/* 核心视觉区域：大图/大视频 */
-.hero-media-section {
-  max-width: 1200px;
-  margin: 0 auto 60px; /* 底部留白 */
-  padding: 0 20px;
-}
-
-.media-wrapper-large {
-  width: 100%;
-  /* 限制最大高度，防止竖图占满好几屏 */
-  max-height: 80vh; 
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08); /* 高级感的投影 */
-  background-color: #f5f5f5;
-}
-
-.media-wrapper-large img,
-.media-wrapper-large video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* 保证完整显示，不被裁切 */
-  display: block;
-  background: #000; /* 视频没加载出来时显示黑色 */
-}
-
-/* 内容排版：双栏布局 */
-.project-info-grid {
-  max-width: 1000px; /* 文字内容稍微窄一点，便于阅读 */
-  margin: 0 auto;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: 1fr 2fr; /* 左边 1份宽，右边 2份宽 */
-  gap: 60px;
-}
-
-/* 左侧：标题和元数据 */
-.info-sidebar h1 {
-  font-size: 2.5rem;
-  line-height: 1.2;
-  color: #111;
-  margin-bottom: 20px;
-  font-weight: 700;
-}
-
-.meta-tag {
-  display: inline-block;
-  background-color: #f0f0f0;
-  color: #555;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 30px;
-}
-
-.info-label {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #999;
-  margin-bottom: 5px;
+  padding: 0;
+  transition: color 0.2s;
 }
 
-.info-value {
-  font-size: 1rem;
-  color: #333;
+.text-link-btn:hover {
+  color: var(--accent-color);
+}
+
+/* 2. Header */
+.project-header {
+  text-align: center;
+  padding: 40px 20px 60px;
+}
+
+.project-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #c0392b; /* 红色小字 */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.project-title {
+  font-family: 'Playfair Display', 'Georgia', serif; /* 关键：衬线体 */
+  font-size: 3rem;
+  font-weight: 400;
+  margin: 0 0 10px 0;
+  color: #1a1a1a;
+}
+
+.project-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+/* 3. Hero Media */
+.hero-wrapper {
+  width: 100%;
+  /* 截图中的首图通常是宽幅，且带一点灰底背景让白模更清晰 */
+  background-color: var(--gray-bg); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 60px;
+  /* 可选：限制最大高度 */
+  /* max-height: 80vh; */
+  overflow: hidden;
+}
+
+.media-content {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover; /* 或者 contain，看你图片比例 */
+}
+
+/* 4. Split Layout (关键布局) */
+.content-body {
+  display: grid;
+  /* 左侧固定宽 300px，右侧自适应 */
+  grid-template-columns: 300px 1fr; 
+  gap: 60px;
+  padding: 0 40px;
+  position: relative;
+}
+
+/* --- 左侧栏 --- */
+.sticky-sidebar {
+  /* 这一行让它固定 */
+  position: sticky;
+  top: 40px; 
+  height: fit-content;
+  padding-bottom: 40px;
+}
+
+/* 那个紫红色的方块 */
+.category-box {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 30px;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.category-label {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.category-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* 元数据列表 */
+.meta-info {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.meta-item {
   margin-bottom: 20px;
 }
 
-/* 右侧：详细描述 */
-.info-main-content {
-  padding-top: 10px; /* 稍微跟左边标题对齐 */
+.meta-item .label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
 }
 
-.description-text {
+.meta-item .value {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* --- 右侧内容流 --- */
+.main-scroll-content {
+  padding-top: 0; /* 跟左侧对齐 */
+}
+
+/* 文本样式 */
+.text-block {
+  max-width: 800px;
+  margin-bottom: 80px;
+}
+
+.intro-text {
+  color: #c0392b; /* 红色引导语 */
+  font-style: italic;
   font-size: 1.1rem;
-  line-height: 1.8; /* 宽松的行高，阅读更舒服 */
-  color: #444;
-  white-space: pre-line; /* 允许你在数据里用 \n 换行 */
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
-/* 动画定义 */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.body-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #4a4a4a;
+  text-align: justify; /* 两端对齐更像文章 */
 }
 
-/* 移动端适配 */
-@media (max-width: 768px) {
-  .project-info-grid {
-    grid-template-columns: 1fr; /* 手机上变单栏 */
-    gap: 30px;
+/* 画廊样式 */
+.vertical-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 80px; /* 图片间距大一点 */
+}
+
+.gallery-item {
+  width: 100%;
+  background-color: var(--gray-bg); /* 给图片加个底，显高级 */
+  /* padding: 40px; 如果你的图是透明底png，打开这个padding */ 
+}
+
+.caption {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #999;
+  text-align: left;
+}
+
+/* --- 响应式 --- */
+@media (max-width: 1024px) {
+  .content-body {
+    grid-template-columns: 1fr; /* 变回单栏 */
+    gap: 40px;
+  }
+
+  .sticky-sidebar {
+    position: static; /* 手机上取消固定 */
+    display: flex;
+    flex-direction: column-reverse; /* 把红色盒子放下面一点 */
   }
   
-  .info-sidebar h1 {
+  .category-box {
+    margin-top: 20px;
+  }
+  
+  .project-title {
     font-size: 2rem;
   }
 }
