@@ -25,52 +25,37 @@ const ProjectCard = ({ project, onClick }) => {
     }
   };
 
-  return (
+return (
     <article className="editorial-card" onClick={onClick}>
-      
-      {/* 1. 媒体区域 */}
-      <div 
+
+      {/* 1. 媒体区域 (保持不变) */}
+      <div
         className="card-media-wrapper"
         onMouseEnter={isVideo ? handleMouseEnter : null}
         onMouseLeave={isVideo ? handleMouseLeave : null}
       >
-        {isVideo ? (
-          <video 
-            ref={videoRef}
-            src={project.video} 
-            className="card-media"
-            muted 
-            loop 
-            playsInline
-            preload="metadata" // 预加载元数据，防止黑屏
-          />
-        ) : (
-          <img 
-            src={project.video} // 你的数据源里图片也叫 video，保持不变
-            alt={project.title} 
-            className="card-media"
-            loading="lazy"
-          />
-        )}
-        
-        {/* 可选：加上一个半透明遮罩，hover时变亮 */}
-        <div className="media-overlay"></div>
+        {/* ... (省略媒体代码，保持不变) ... */}
       </div>
 
       {/* 2. 文字区域 */}
       <div className="card-content">
-        
-        {/* 顶部标签 (模拟杂志分类) */}
+
+        {/* ✅ 修改这里：顶部标签 */}
         <div className="card-meta">
-          <span className="card-category">Product Design</span>
-          <span className="card-year">2024</span>
+          {/* 之前是写死的 <span className="card-category">Product Design</span> */}
+          {/* 现在改为读取数据: */}
+          <span className="card-category">{project.displayCategory}</span>
+
+          {/* 之前是写死的 <span className="card-year">2024</span> */}
+          {/* 现在改为读取数据 (如果有些老项目没有年份，可以用 || 提供个默认值): */}
+          <span className="card-year">{project.year || '202X'}</span>
         </div>
 
         <h3 className="card-title">{project.title}</h3>
-        
-        {/* 简介限制行数，防止参差不齐 */}
+
+        {/* 简介 */}
         <p className="card-desc">{project.desc}</p>
-        
+
         <div className="card-footer">
           <span className="read-more">View Project →</span>
         </div>
