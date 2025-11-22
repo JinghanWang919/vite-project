@@ -1,0 +1,242 @@
+/* Changelog.css */
+
+.changelog-page {
+  /* 复用之前的变量，保持风格统一 */
+  --accent-color: #b01564;
+  --bg-color: #ffffff;
+  --text-main: #333;
+  --text-light: #888;
+  --border-color: #e0e0e0;
+  
+  max-width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  /* 字体栈保持一致 */
+  font-family: 'Merriweather', 'Noto Sans SC', sans-serif;
+}
+
+/* 导航 */
+.changelog-nav {
+  padding: 30px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 容器限制宽度，增强阅读感 */
+.changelog-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* 头部 */
+.changelog-header {
+  margin-bottom: 60px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 40px;
+}
+
+.page-title {
+  font-family: 'Merriweather', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 0 0 10px 0;
+}
+
+.page-subtitle {
+  font-family: 'Noto Sans SC', sans-serif;
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+/* --- Timeline 核心样式 --- */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* 间距由 item 的 padding 控制 */
+}
+
+.timeline-item {
+  display: flex;
+  position: relative;
+  padding-bottom: 60px; /* 每条记录的底部间距 */
+}
+
+/* 最后一项去掉底部线条 */
+.timeline-item:last-child .timeline-divider::after {
+  display: none;
+}
+
+/* 左侧：日期 */
+.timeline-left {
+  width: 100px; /* 固定宽度 */
+  flex-shrink: 0;
+  text-align: right;
+  padding-right: 20px;
+  padding-top: 5px;
+}
+
+.log-date {
+  display: block;
+  font-family: 'Noto Sans SC', monospace; /* 数字用等宽风格很好看 */
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.log-version {
+  display: block;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* 中间：线条与圆点 */
+.timeline-divider {
+  position: relative;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+/* 圆点 */
+.timeline-divider::before {
+  content: '';
+  position: absolute;
+  top: 8px; /* 根据标题高度微调 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--bg-color);
+  border: 2px solid var(--accent-color);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* 竖线 */
+.timeline-divider::after {
+  content: '';
+  position: absolute;
+  top: 18px; /* 从圆点下方开始 */
+  bottom: -60px; /* 延伸到下一个 item */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background-color: var(--border-color);
+  z-index: 1;
+}
+
+/* 右侧：内容 */
+.timeline-content {
+  padding-left: 20px;
+  padding-top: 0;
+  flex-grow: 1;
+}
+
+.content-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.log-title {
+  font-family: 'Merriweather', 'Noto Sans SC', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* 标签样式 */
+.log-tags {
+  display: flex;
+  gap: 8px;
+}
+
+.tag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: #f0f0f0;
+  color: #666;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+/* 标签特定颜色 */
+.tag-design { background-color: #fbebf3; color: var(--accent-color); }
+.tag-fix { background-color: #e3f2fd; color: #1976d2; }
+.tag-release { background-color: #e8f5e9; color: #2e7d32; }
+
+/* 列表内容 */
+.log-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.log-list li {
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 8px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* 列表项前面的小点 */
+.log-list li::before {
+  content: '-';
+  position: absolute;
+  left: 0;
+  color: #ccc;
+}
+
+/* 底部 */
+.changelog-footer {
+  margin-top: 40px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #aaa;
+  font-family: 'Merriweather', serif;
+  font-style: italic;
+}
+
+/* 移动端适配 */
+@media (max-width: 600px) {
+  .timeline-item {
+    flex-direction: column;
+  }
+  
+  .timeline-left {
+    width: 100%;
+    text-align: left;
+    padding-left: 40px; /* 对齐内容 */
+    margin-bottom: 10px;
+  }
+  
+  .timeline-divider {
+    position: absolute;
+    left: 0;
+    height: 100%;
+  }
+
+  .timeline-divider::before {
+    left: 10px; /* 移到最左边 */
+  }
+
+  .timeline-divider::after {
+    left: 10px;
+  }
+  
+  .timeline-content {
+    padding-left: 40px;
+  }
+}

@@ -1,71 +1,72 @@
 import { useState } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, Link } from 'react-router-dom' // ✅ 引入 Link
 import './App.css'
+
+// 引入页面组件
 import ProjectDetail from './pages/ProjectDetail'
 import ProjectCard from './components/ProjectCard'
+import Changelog from './pages/Changelog' // ✅ 引入更新日志页 (假设你放在 pages 文件夹)
 
-// ✅ 辅助函数：专门处理路径拼接，防止双斜杠问题
+// ✅ 优化后的辅助函数：使用 Vite 环境变量，更智能
+const base = import.meta.env.BASE_URL;
+
 const getAssetUrl = (path) => {
-  // 1. 设定基础路径 (仓库名)
-  const repoName = '/vite-project';
-  
-  // 2. 确保 path 是字符串
   if (!path) return '';
-
-  // 3. 如果 path 已经是 http 开头的网络图片，直接返回
   if (path.startsWith('http')) return path;
-
-  // 4. 移除 path 开头的斜杠 (如果有)，避免拼成 /vite-project//images...
+  
+  // 移除开头的 / 防止双斜杠
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-
-  // 5. 返回完整路径
-  return `${repoName}/${cleanPath}`;
+  
+  // 拼接 base_url
+  return `${base}${cleanPath}`;
 };
 
 function HomePage() {
   const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState('all')
 
+  // 背景色保持淡雅，配合杂志风
   const categoryColors = {
-    all: '#f4f4f5', 
-    graduation: '#dfe6e9', 
-    course: '#e9ece5', 
-    sketch: '#f2ebe3', 
-    other: '#e0e0e0'
+    all: '#ffffff', 
+    graduation: '#f9f9f9', 
+    course: '#f4f6f0', 
+    sketch: '#faf7f5', 
+    other: '#f5f5f5'
   }
 
-  // ✅ 修改数据源：只写文件名和文件夹，不要自己加前缀，交给 getAssetUrl 处理
   const projects = [
     { 
       id: 1, 
       title: '户外露营桌', 
       desc: '便携设计与结构创新', 
-      // 这里的路径不要加 / 开头
       video: 'videos/eco.mp4', 
-      category: 'course' 
+      category: 'course',
+      year: '2023' // 补充数据
     },
     { 
       id: 2, 
       title: 'LUMENA红光理疗仪', 
       desc: '面向轻疗美容人群的多区红光理疗仪', 
       video: 'images/red3.png', 
-      category: 'other' 
+      category: 'other',
+      year: '2024'
     },
     { 
       id: 3, 
       title: '银龄智联——居家守护', 
       desc: '智能家居机器人设计', 
       video: 'images/ren4.png', 
-      category: 'course' 
+      category: 'course',
+      year: '2024'
     },
   ]
 
   const navItems = [
-    { label: '全部', value: 'all' },
-    { label: '毕业设计', value: 'graduation' },
-    { label: '课程设计', value: 'course' },
-    { label: '手绘作品', value: 'sketch' },
-    { label: '其他项目', value: 'other' },
+    { label: 'ALL WORK', value: 'all' }, // 英文标签显得更高级
+    { label: 'GRADUATION', value: 'graduation' },
+    { label: 'COURSEWORK', value: 'course' },
+    { label: 'SKETCHES', value: 'sketch' },
+    { label: 'OTHERS', value: 'other' },
   ]
 
   const filteredProjects = activeCategory === 'all' 
@@ -78,11 +79,14 @@ function HomePage() {
       style={{ backgroundColor: categoryColors[activeCategory] }}
     >
       <div className="container">
+        {/* Header: 杂志风格化 */}
         <header className="site-header">
-          <h1>王景馯 · Portfolio</h1>
-          <p>产品设计 / 交互体验 / 创新原型</p>
+          <div className="header-top-label">PORTFOLIO 2025</div>
+          <h1 className="main-title">Jan Meschan</h1>
+          <p className="sub-title">Product Design / UX Research / Prototyping</p>
         </header>
 
+        {/* Nav: 简约化 */}
         <nav className="nav-bar">
           {navItems.map((item) => (
             <button 
@@ -95,33 +99,50 @@ function HomePage() {
           ))}
         </nav>
 
+        {/* Grid: 保持不变，逻辑正确 */}
         <div className="project-grid">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((p) => (
               <ProjectCard 
                 key={p.id} 
-                // ✅ 这里需要把处理过的 project 对象传下去，或者在 ProjectCard 内部处理
-                // 为了简单起见，我们在这里修改一下传下去的数据
                 project={{
                     ...p,
-                    video: getAssetUrl(p.video) // 👈 关键：在这里调用函数转换路径
+                    video: getAssetUrl(p.video) 
                 }} 
                 onClick={() => navigate(`/project/${p.id}`, { state: p })} 
               />
             ))
           ) : (
-            <div className="empty-state">此分类下暂无项目</div>
+            <div className="empty-state">No projects found in this category.</div>
           )}
         </div>
 
+        {/* ✅ Footer: 新增状态栏风格 */}
         <footer className="site-footer">
-          <div className="footer-contact">
-            <span>Contact Me</span>
-            <span className="separator">/</span>
-            <a href="mailto:halewalker@163.com" className="footer-link">Email: halewalker@163.com</a>
-            <span className="separator">/</span>
-            <span>QQ: 413375678</span>
+          
+          <div className="footer-contact-row">
+            <h3>Let's Connect</h3>
+            <div className="contact-links">
+              <a href="mailto:halewalker@163.com">halewalker@163.com</a>
+              <span>/</span>
+              <span>QQ: 413375678</span>
+            </div>
           </div>
+
+          {/* 状态栏 (Status Bar) */}
+          <div className="status-bar">
+            <div className="status-left">
+              © 2025 Jan Meschan. All Rights Reserved.
+            </div>
+            
+            <div className="status-right">
+              {/* 指向更新日志的链接 */}
+              <Link to="/changelog" className="changelog-link">
+                System Status: v2.1 (Stable)
+              </Link>
+            </div>
+          </div>
+
         </footer>
       </div>
     </div>
@@ -133,6 +154,8 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/project/:id" element={<ProjectDetail />} />
+      {/* ✅ 添加 Changelog 路由 */}
+      <Route path="/changelog" element={<Changelog />} />
     </Routes>
   )
 }
