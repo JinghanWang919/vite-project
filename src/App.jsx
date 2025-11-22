@@ -41,7 +41,7 @@ function HomePage() {
       desc: '便携设计与结构创新', 
       video: 'videos/eco.mp4', 
       category: 'course',
-      year: '2023' // 补充数据
+      year: '2025' // 补充数据
     },
     { 
       id: 2, 
@@ -49,7 +49,7 @@ function HomePage() {
       desc: '面向轻疗美容人群的多区红光理疗仪', 
       video: 'images/red3.png', 
       category: 'other',
-      year: '2024'
+      year: '2025'
     },
     { 
       id: 3, 
@@ -57,16 +57,16 @@ function HomePage() {
       desc: '智能家居机器人设计', 
       video: 'images/ren4.png', 
       category: 'course',
-      year: '2024'
+      year: '2025'
     },
   ]
 
   const navItems = [
-    { label: 'ALL WORK', value: 'all' }, // 英文标签显得更高级
-    { label: 'GRADUATION', value: 'graduation' },
-    { label: 'COURSEWORK', value: 'course' },
-    { label: 'SKETCHES', value: 'sketch' },
-    { label: 'OTHERS', value: 'other' },
+    { label: '全部作品', value: 'all' }, // 英文标签显得更高级
+    { label: '毕业设计', value: 'graduation' },
+    { label: '课程作业', value: 'course' },
+    { label: '手绘草图', value: 'sketch' },
+    { label: '其他项目', value: 'other' },
   ]
 
   const filteredProjects = activeCategory === 'all' 
@@ -83,7 +83,7 @@ function HomePage() {
         <header className="site-header">
           <div className="header-top-label">PORTFOLIO 2025</div>
           <h1 className="main-title">王景馯</h1>
-          <p className="sub-title">Product Design / UX Research / Prototyping</p>
+          <p className="sub-title">工业设计 / 以人为本 /未来构想 </p>
         </header>
 
         {/* Nav: 简约化 */}
@@ -138,7 +138,7 @@ function HomePage() {
             <div className="status-right">
               {/* 指向更新日志的链接 */}
               <Link to="/changelog" className="changelog-link">
-                System Status: v2.1 (Stable)
+                System Status: v3.0 (Stable)
               </Link>
             </div>
           </div>
