@@ -1,0 +1,349 @@
+/* ResumeSection.css */
+
+.resume-section {
+  width: 100%;
+  /* ✅ 控制间距：顶部和底部都留出大间距 */
+  padding-top: 50px; 
+  padding-bottom: 50px; 
+  background-color: transparent;
+  /* ✅ 分隔线：确保它位于简历模块的上方，将它与项目网格分开 */
+  border-top: 1px solid #e0e0e0; 
+  /* 移除 border-bottom，如果存在的话 */
+  border-bottom: none;
+}
+.resume-container {
+  max-width: 1200px; /* 与 App.css 的 container 保持一致 */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr; /* 左侧宽一点，右侧窄一点 */
+  gap: 60px;
+  align-items: start;
+}
+
+/* 左侧信息区 */
+.resume-info {
+  padding-right: 20px;
+}
+
+.resume-header {
+  margin-bottom: 50px;
+}
+
+.resume-name {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.resume-title {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 20px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.resume-contact {
+  font-family: monospace; /* 增加一点技术感 */
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.contact-link {
+  color: #1a1a1a;
+  text-decoration: none;
+  border-bottom: 1px solid #1a1a1a;
+  transition: all 0.2s;
+}
+
+.contact-link:hover {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+.separator {
+  margin: 0 10px;
+  color: #ccc;
+}
+
+/* 简历主体内容 */
+.resume-body {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+.block-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #999;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid #1a1a1a; /* 短横线装饰 */
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.block-content p {
+  margin: 4px 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.sub-text {
+  font-size: 0.9rem;
+  color: #666 !important;
+  margin-top: 2px;
+}
+
+/* 经历条目 */
+.block-item {
+  margin-bottom: 20px;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.item-date {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* 列表样式 */
+.honor-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.honor-list li {
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.honor-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #999;
+}
+
+/* 按钮 */
+.resume-action {
+  margin-top: 50px;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 30px;
+  background-color: #1a1a1a;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.download-btn:hover {
+  background-color: #444;
+}
+
+.download-btn .arrow {
+  margin-left: 10px;
+  transition: transform 0.2s;
+}
+
+.download-btn:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* 右侧图片区 */
+.resume-visual {
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 10px;
+}
+
+.image-wrapper {
+  width: 100%;
+  overflow: hidden;
+  /* 可以添加一点阴影增加层次 */
+  box-shadow: 20px 20px 0px rgba(0,0,0,0.05); 
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* 稍微降低饱和度以符合高级灰/杂志风，或者保持原色 */
+  /* filter: grayscale(20%); */
+  transition: transform 0.5s ease;
+}
+
+.image-wrapper:hover img {
+  transform: scale(1.02);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .resume-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .resume-visual {
+    order: -1; /* 移动端把图片放到上面 */
+    margin-bottom: 20px;
+  }
+  
+  .resume-name {
+    font-size: 2.5rem;
+  }
+}
+
+/* 修改 .resume-action 让按钮横向排列 */
+.resume-action {
+  margin-top: 50px;
+  display: flex;        /* 启用 Flex 布局 */
+  gap: 20px;            /* 两个按钮之间的间距 */
+  flex-wrap: wrap;      /* 手机屏幕不够宽时自动换行 */
+}
+
+/* 基础按钮样式 (保持原有，确保尺寸一致) */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; /* 文字居中 */
+  padding: 12px 30px;
+  background-color: #1a1a1a;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  border: 1px solid #1a1a1a; /* 加上透明或同色边框以保持尺寸计算一致 */
+  min-width: 140px;          /* 可选：设置最小宽度让它们看起来更整齐 */
+}
+
+.download-btn:hover {
+  background-color: #444;
+  border-color: #444;
+}
+
+.download-btn .arrow {
+  margin-left: 10px;
+  transition: transform 0.2s;
+}
+
+.download-btn:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* ✅ 新增：黑框白底样式 (覆盖基础样式) */
+.outline-btn {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  border: 1px solid #1a1a1a; /* 黑色边框 */
+}
+
+/* 悬停效果：变为浅灰或黑色背景 */
+.outline-btn:hover {
+  background-color: #f2f2f2; /* 浅灰色背景 */
+  color: #000;
+  border-color: #000;
+}
+
+/* ===================================== */
+/* ✅ 新增：模态框/Lightbox 样式 */
+/* ===================================== */
+
+.resume-modal-overlay {
+  /* 覆盖全屏并固定 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  /* 半透明的黑色背景，实现变暗效果 */
+  background-color: rgba(0, 0, 0, 0.9); 
+  
+  /* 确保在所有内容之上 */
+  z-index: 9999; 
+  
+  /* 居中内容 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resume-modal-content {
+  position: relative;
+  max-width: 90%; /* 限制图片最大宽度 */
+  max-height: 90vh; /* 限制图片最大高度，防止溢出屏幕 */
+  background: white; /* 给图片一个白底，使其更清晰 */
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.resume-modal-content img {
+  display: block;
+  max-width: 100%;
+  max-height: 85vh; /* 实际图片高度 */
+  object-fit: contain;
+}
+
+.close-btn {
+  /* 关闭按钮定位在右上角 */
+  position: absolute;
+  top: 0px;
+  right: -40px;
+  
+  /* 样式 */
+  background: none;
+  border: none;
+  color: white; /* 按钮颜色为白色，在黑色背景上突出 */
+  font-size: 3rem;
+  font-weight: 300;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+/* 响应式调整关闭按钮位置，防止在小屏幕上溢出 */
+@media (max-width: 768px) {
+  .close-btn {
+    top: 5px;
+    right: 5px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 0;
+  }
+}

@@ -1,26 +1,31 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import './ProjectCard.css';
 
 const ProjectCard = ({ project, onClick }) => {
   const videoRef = useRef(null);
+  const [imgError, setImgError] = useState(false);
   
-  // 判断逻辑保持不变
-  const isVideo = project.video && project.video.endsWith('.mp4');
+  // ✅ 关键修复 1: 使用正则判断，支持大小写 (.MP4) 和更多格式
+  // 如果路径为空，直接视为非视频
+  const isVideo = project.video && /\.(mp4|webm|ogg|mov)$/i.test(project.video);
 
-  // 更稳健的播放控制
   const handleMouseEnter = () => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(error => {
-        // 防止用户快速划过时，浏览器报错 "The play() request was interrupted"
-        console.log("Video play interrupted", error);
-      });
+    // 只有视频才需要播放
+    if (isVideo && videoRef.current) {
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // 忽略用户快速滑过导致的打断错误
+          // console.log("Auto-play prevented");
+        });
+      }
     }
   };
 
   const handleMouseLeave = () => {
-    if (videoRef.current) {
+    if (isVideo && videoRef.current) {
       videoRef.current.pause();
-      // 可选：移开时重置进度到开头
+      // 可选：鼠标移开重置进度
       // videoRef.current.currentTime = 0; 
     }
   };
@@ -31,44 +36,51 @@ const ProjectCard = ({ project, onClick }) => {
       {/* 1. 媒体区域 */}
       <div 
         className="card-media-wrapper"
-        onMouseEnter={isVideo ? handleMouseEnter : null}
-        onMouseLeave={isVideo ? handleMouseLeave : null}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {isVideo ? (
           <video 
             ref={videoRef}
             src={project.video} 
-            className="card-media"
+            className="card-media video-content" // 加个专用类名方便调试
             muted 
             loop 
             playsInline
-            preload="metadata" // 预加载元数据，防止黑屏
+            preload="metadata"
+            style={{ objectFit: 'cover', width: '100%', height: '100%', display: 'block' }}
           />
         ) : (
           <img 
-            src={project.video} // 你的数据源里图片也叫 video，保持不变
+            // ✅ 关键修复 2: 如果图片加载失败 (imgError为true)，显示默认占位图或颜色
+            src={imgError ? "https://placehold.co/600x400?text=No+Image" : project.video} 
             alt={project.title} 
-            className="card-media"
+            className="card-media image-content"
             loading="lazy"
+            onError={() => setImgError(true)} // 捕获 404 错误
+            style={{ 
+              objectFit: 'cover', 
+              width: '100%', 
+              height: '100%', 
+              display: 'block', // 防止图片下方产生空隙
+              backgroundColor: '#f0f0f0' // 图片未加载时的背景色
+            }}
           />
         )}
         
-        {/* 可选：加上一个半透明遮罩，hover时变亮 */}
+        {/* 半透明遮罩 */}
         <div className="media-overlay"></div>
       </div>
 
       {/* 2. 文字区域 */}
       <div className="card-content">
-        
-        {/* 顶部标签 (模拟杂志分类) */}
         <div className="card-meta">
-          <span className="card-category">Design</span>
-          <span className="card-year">2025</span>
+          {/* 优先显示 project 里的真实分类和年份 */}
+          <span className="card-category">{project.category || 'Design'}</span>
+          <span className="card-year">{project.year || '2025'}</span>
         </div>
 
         <h3 className="card-title">{project.title}</h3>
-        
-        {/* 简介限制行数，防止参差不齐 */}
         <p className="card-desc">{project.desc}</p>
         
         <div className="card-footer">

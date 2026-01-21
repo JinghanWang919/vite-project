@@ -1,31 +1,51 @@
-import { useState } from 'react'
-import { Routes, Route, useNavigate, Link } from 'react-router-dom' // ✅ 引入 Link
+// src/App.jsx
+
+import ResumeSection from "./components/ResumeSection";
+import ExperienceCarousel from "./components/ExperienceCarousel";
+import { useState, useEffect } from 'react' 
+import { Routes, Route, useNavigate, Link, useSearchParams } from 'react-router-dom' 
 import './App.css'
 
 // 引入页面组件
 import ProjectDetail from './pages/ProjectDetail'
 import ProjectCard from './components/ProjectCard'
-import Changelog from './pages/Changelog' // ✅ 引入更新日志页 (假设你放在 pages 文件夹)
+import Changelog from './pages/Changelog' 
 
-// ✅ 优化后的辅助函数：使用 Vite 环境变量，更智能
+// ✅ 引入新的数据源
+import { projectData as allProjects } from './data/projects'; 
+
 const base = import.meta.env.BASE_URL;
 
 const getAssetUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http')) return path;
   
-  // 移除开头的 / 防止双斜杠
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   
-  // 拼接 base_url
   return `${base}${cleanPath}`;
 };
 
 function HomePage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams(); 
+  
   const [activeCategory, setActiveCategory] = useState('all')
 
-  // 背景色保持淡雅，配合杂志风
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    
+    if (tabParam) {
+      const validCategories = ['all', 'graduation', 'course', 'sketch', 'other'];
+      if (validCategories.includes(tabParam)) {
+        setActiveCategory(tabParam);
+      } else {
+        setActiveCategory('all');
+      }
+    } else {
+      setActiveCategory('all');
+    }
+  }, [searchParams]);
+
   const categoryColors = {
     all: '#ffffff', 
     graduation: '#f9f9f9', 
@@ -34,46 +54,44 @@ function HomePage() {
     other: '#f5f5f5'
   }
 
-  const projects = [
-    { 
-      id: 1, 
-      title: '户外露营桌', 
-      desc: '便携设计与结构创新', 
-      video: 'videos/eco.mp4', 
-      category: 'course',
-      year: '2025' // 补充数据
-    },
-    { 
-      id: 2, 
-      title: 'LUMENA红光理疗仪', 
-      desc: '面向轻疗美容人群的多区红光理疗仪', 
-      video: 'images/red3.png', 
-      category: 'other',
-      year: '2025'
-    },
-    { 
-      id: 3, 
-      title: '银龄智联——居家守护', 
-      desc: '智能家居机器人设计', 
-      video: 'images/ren4.png', 
-      category: 'course',
-      year: '2025'
-    },
-  ]
+  // ⚠️ 删除了硬编码的 projects 数组，现在从 allProjects (projectData) 获取。
+  // 注意：ProjectCard 组件需要 title, desc, video, category, year 这些字段。
+ const projects = allProjects.map(p => {
+    // 媒体源：优先使用 coverImage，然后是 mobileHeroVideo
+    const cardMediaSrc = p.coverImage || p.mobileHeroVideo;
+    
+    // 如果上面两个都没有，尝试使用 media 数组的第一个元素
+    const finalMediaSrc = cardMediaSrc || 
+                          (p.media && p.media.length > 0 ? p.media[0].src : '') || 
+                          ''; // 确保最终不会是 undefined 或 null
+
+    return {
+        id: p.id,
+        title: p.title,
+        desc: p.desc || p.subtitle, 
+        // 确保传递给 ProjectCard 的 'video' 字段是最终的路径
+        video: finalMediaSrc, 
+        category: p.category,
+        year: p.year
+    }
+});
+
 
   const navItems = [
-    { label: '全部', value: 'all' }, // 英文标签显得更高级
+    { label: '全部', value: 'all' }, 
     { label: '毕业设计', value: 'graduation' },
     { label: '课程作业', value: 'course' },
     { label: '手绘草图', value: 'sketch' },
     { label: '其他项目', value: 'other' },
   ]
 
+  // 过滤逻辑依赖于 activeCategory 状态
   const filteredProjects = activeCategory === 'all' 
     ? projects 
     : projects.filter(p => p.category === activeCategory)
 
   return (
+    // ... (其余 JSX 保持不变)
     <div 
       className="page-background" 
       style={{ backgroundColor: categoryColors[activeCategory] }}
@@ -104,41 +122,36 @@ function HomePage() {
           {filteredProjects.length > 0 ? (
             filteredProjects.map((p) => (
               <ProjectCard 
-                key={p.id} 
-                project={{
-                    ...p,
-                    video: getAssetUrl(p.video) 
-                }} 
-                onClick={() => navigate(`/project/${p.id}`, { state: p })} 
-              />
+  key={p.id} 
+  project={{
+      ...p,
+      // ⚠️ 检查：getAssetUrl(p.video) 这里的 p.video 应该是一个路径字符串，而不是 null/undefined
+      video: getAssetUrl(p.video) 
+  }} 
+  onClick={() => navigate(`/project/${p.id}`, { state: p })} 
+/>
             ))
           ) : (
             <div className="empty-state">No projects found in this category.</div>
           )}
         </div>
 
-        {/* ✅ Footer: 新增状态栏风格 */}
+
+        <ResumeSection />
+
+      <ExperienceCarousel />
+
+        {/* Footer: 修改后的部分 */}
         <footer className="site-footer">
           
-          <div className="footer-contact-row">
-            <h3>Let's Connect</h3>
-            <div className="contact-links">
-              <a href="mailto:halewalker@163.com">halewalker@163.com</a>
-              <span>/</span>
-              <span>QQ: 413375678</span>
-            </div>
-          </div>
-
-          {/* 状态栏 (Status Bar) */}
           <div className="status-bar">
             <div className="status-left">
               © 2025 Jinghan Wang. All Rights Reserved.
             </div>
             
             <div className="status-right">
-              {/* 指向更新日志的链接 */}
               <Link to="/changelog" className="changelog-link">
-                System Status: v3.0 (Stable)
+                System Status: v3.6 (Stable)
               </Link>
             </div>
           </div>
@@ -154,7 +167,6 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/project/:id" element={<ProjectDetail />} />
-      {/* ✅ 添加 Changelog 路由 */}
       <Route path="/changelog" element={<Changelog />} />
     </Routes>
   )

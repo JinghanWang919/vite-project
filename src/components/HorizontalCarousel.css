@@ -1,0 +1,109 @@
+/*
+ * ----------------------------------------------------
+ * HorizontalCarousel.css - 基于 Swiper 的最终样式
+ * ----------------------------------------------------
+ */
+
+/* 外部容器样式 */
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px; /* 示例宽度，与 ExperienceCarousel 保持一致 */
+  margin: 60px auto; /* 保持上下边距，居中 */
+}
+
+/* Swiper 容器样式 */
+.common-swiper {
+  width: 100%;
+  height: auto;
+  padding-bottom: 50px; /* ⬅️ 关键修改：为分页器留出向下移动的空间 */
+}
+
+/* Slide 及其内容样式 */
+.carousel-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.carousel-media {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  object-fit: contain; 
+}
+
+.caption {
+  text-align: center;
+  font-size: 0.8rem;
+  margin-top: 20px;
+  color: #666;
+}
+
+/* ================================================== */
+/* 统一的 Swiper 导航箭头样式 (与 ExperienceCarousel 风格一致) */
+/* ================================================== */
+
+.common-swiper .swiper-button-prev,
+.common-swiper .swiper-button-next {
+  color: #000; /* 箭头图标颜色改为黑色或深色 */
+  background-color: rgba(255, 255, 255, 0.7); /* 白色半透明背景 */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* 圆形 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.common-swiper .swiper-button-prev:hover,
+.common-swiper .swiper-button-next:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.common-swiper .swiper-button-prev::after,
+.common-swiper .swiper-button-next::after {
+  font-size: 20px;
+}
+
+/* 调整箭头位置，使其靠近边缘 */
+.common-swiper .swiper-button-prev {
+  left: 10px;
+}
+.common-swiper .swiper-button-next {
+  right: 10px;
+}
+
+/* ================================================== */
+/* 统一的 Swiper 分页器 (小圆点) 样式 */
+/* ================================================== */
+
+/* 1. 分页器容器：向下移动的关键 */
+.common-swiper .swiper-pagination {
+    bottom: 0px; /* ⬅️ 关键修改：将小圆点紧贴容器底部 */
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+/* 2. 单个小圆点 */
+.common-swiper .swiper-pagination-bullet {
+    background-color: #ccc; /* 默认颜色 */
+    opacity: 1; 
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* 3. 激活状态的小圆点 (与你原始的 .dot.active 相似的黑色) */
+.common-swiper .swiper-pagination-bullet-active {
+    background-color: #000; /* 激活颜色 (黑色) */
+    transform: scale(1.25); /* 激活时稍微放大 */
+}

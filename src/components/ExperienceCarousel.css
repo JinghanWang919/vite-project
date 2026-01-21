@@ -1,0 +1,146 @@
+/* src/components/ExperienceCarousel.css */
+
+.experience-carousel-section {
+    padding-top: 60px; 
+    padding-bottom: 100px; 
+    background-color: transparent;
+    border-top: none;
+}
+
+.carousel-container {
+    max-width: 1000px; 
+    margin: 0 auto;
+    /* 左右留出 20px 间距，同时为外部箭头留出空间 */
+    padding: 0 20px; 
+    position: relative; 
+}
+
+/* --- 样式部分（保持精致小巧）--- */
+/**/.swiper-button-next,
+.swiper-button-prev {
+    color: #1a1a1a !important; 
+    height: 32px !important; 
+    width: 32px !important;  
+    background: rgba(255, 255, 255, 0.9); 
+    border-radius: 0%;
+    transition: all 0.3s ease;
+    top: 50%; 
+    transform: translateY(-50%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    z-index: 10; 
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 0.9rem !important; 
+    font-weight: 600; 
+}
+
+/* =========================================
+   ✅ 桌面端定位 (大于 1100px)：外部定位
+========================================= */
+
+/* PC 端箭头定位到容器外部 -50px */
+.swiper-button-prev {
+    left: 10px !important; 
+}
+.swiper-button-next {
+    right: 10px !important; 
+}
+
+/* --- 响应式适配 --- */
+
+@media (max-width: 1100px) {
+    /* 平板/较窄PC屏幕：将箭头移回容器内部贴边，防止跑出屏幕 */
+    .swiper-button-prev {
+        left: 0px !important; 
+    }
+    .swiper-button-next {
+        right: 0px !important; 
+    }
+}
+
+@media (max-width: 768px) {
+    /* ✅ 手机端修正：确保箭头完全贴在容器的 5px 边缘，不会堆叠 */
+    .swiper-button-prev {
+        left: 5px !important; 
+    }
+    .swiper-button-next {
+        right: 5px !important; 
+    }
+    
+    /* 手机端进一步优化箭头大小 */
+    .swiper-button-prev,
+    .swiper-button-next {
+        height: 28px !important; 
+        width: 28px !important;  
+        background: rgba(255, 255, 255, 0.7); 
+    }
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+        font-size: 0.8rem !important;
+    }
+}
+
+/* --- 其他样式（略） --- */
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+.title-line {
+    width: 40px;
+    height: 2px;
+    background-color: #1a1a1a;
+    margin: 0 auto;
+}
+.slide-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.image-frame {
+    width: 100%;
+    aspect-ratio: 3 / 2; 
+    overflow: hidden;
+    background-color: #f0f0f0; 
+    margin-bottom: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
+}
+.image-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    transition: transform 0.5s ease;
+}
+.text-frame {
+    width: 100%; 
+    padding: 0 10px;
+}
+.slide-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+}
+.slide-caption {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #555;
+    font-family: serif; 
+    font-style: normal; 
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    background: #1a1a1a;
+    color: #fff !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+}

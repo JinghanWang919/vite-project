@@ -1,172 +1,406 @@
-import React, { useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import './ProjectDetail.css'
-
-// ✅ 你的项目数据 (保持不变)
-const base = import.meta.env.BASE_URL;
-const projectData = [
-  {
-    id: 1,
-    title: '户外露营桌',
-    category: 'Industrial Design', // 新增模拟数据
-    year: '2025', // 新增模拟数据
-    desc: '本设计以折叠为核心，打造兼具结构理性与生活美学的模块化露营桌。采用轻量化铝合金与仿木纹金属腿，桌面可拼接扩展并嵌入多功能模块。下方双层置物平台提升空间利用率，折叠后轻便易收，满足多场景露营需求。',
-    media: [
-      { type: 'video', src:`${base}videos/eco.mp4`},
-      { type: 'image', src:`${base}images/luyingzhuo-detail.jpg`},
-      { type: 'image', src:`${base}images/luyingzhuo-detail1.png`},
-      { type: 'image', src:`${base}images/luyingzhuo-detail2.png`},
-      { type: 'image', src:`${base}images/luyingzhuo-detail3.png` },
-      { type: 'image', src:`${base}images/luyingzhuo-detail4.png`},
-      { type: 'image', src:`${base}images/luyingzhuo-detail5.png`},
-      { type: 'image', src:`${base}images/luyingzhuo-detail6.png`},
-      { type: 'image', src:`${base}images/luyingzhuo-detail7.png`},
-    ],
-  },
-  {
-    id: 2,
-    title: 'LUMENA红光理疗仪',
-    category: 'Medical Device',
-    year: '2025',
-    desc: '《LUMENA 多区红光理疗产品设计》是基于华尔集团课题，针对居家康复与美容护理场景打造的创新理疗解决方案。该设计以“光至深处，疗愈有度”为核心理念，聚焦注重身体管理与轻疗保健的用户需求，融合医学级红光波段技术与人体工程学模块化设计，推出“露恩环（LUMENA Core）”与“露恩贴（LUMENA Mini）”两大产品形态。其中，露恩环通过柔性可调节光片，实现腰腹、背部、大臂等多区域的深层热疗与舒缓；露恩贴则以便携充电式设计，精准覆盖手腕、小腿等局部部位，满足轻量护理需求。整套产品兼具“高效理疗、多场景适配、操作简洁、便携可持续”的设计目标，凭借仿肤亲柔材质、智能APP调控及Type-C通用接口等细节，重新定义居家美容与康复体验，让用户在日常场景中即可享受专业级的轻疗愈护理仪式。',
-    media: [
-      { type: 'image', src: `${base}images/red3.png`},
-      { type: 'image', src: `${base}images/red.png`},
-      { type: 'image', src: `${base}images/red2.png` },
-      { type: 'image', src: `${base}images/red3.png` },
-      { type: 'image', src: `${base}images/red3.jpg`},
-    ],
-  },
-  {
-    id: 3,
-    title: '居家守护中枢',
-    category: 'Smart Home',
-    year: '2025',
-    desc: '针对独居老人的安全保障、生活辅助与情感陪伴需求，本设计打造了一款适老化智能中枢产品。它集成视觉感知、语音控制与设备联动能力，可实现健康预警、生活服务及情感交互的全场景覆盖。产品通过多传感器架构监测老人生命体征与行为状态，配备多模态交互方式降低操作门槛，更融入情感化设计，能识别并响应老人情绪。同时，电动储物、地形适配及政务服务集成等功能，从日常起居到社会连接维度，为独居老人构建安全、便捷且有温度的智能生活生态，让科技成为守护银发群体的温情桥梁。',
-    media: [
-      { type: 'image', src:`${base}images/ren3.png`},
-      { type: 'image', src:`${base}images/ren.png`},
-      { type: 'image', src: `${base}images/ren2.png`},
-      { type: 'image', src:`${base}images/ren3.png` },
-    ],
-  },
-]
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import './ProjectDetail.css';
+import HorizontalCarousel from "../components/HorizontalCarousel"; 
+import { projectData } from '../data/projects';
+import ScrollHero, { preloadFrames } from '../components/project-parts/ScrollHero';
 
 const ProjectDetail = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
   
-  const project = projectData.find((p) => p.id === Number(id))
+  // 查找当前项目
+  const project = projectData.find((p) => p.id === Number(id));
+  const isTableProject = project && project.id === 1; 
+  
+  // 判断是否启用“杂志模式” (LUMENA 等新项目)
+  const isMagazineMode = Boolean(project?.sections);
 
+  // --- 状态管理 ---
+  const [previewModal, setPreviewModal] = useState(null); 
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false); 
+  const [isMobile, setIsMobile] = useState(false); 
+  
+  // --- 生命周期 ---
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [id])
+    const checkMobile = () => setIsMobile(window.innerWidth <= 880);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    window.scrollTo(0, 0); 
+    
+    if (isTableProject && !isMobile) {
+      preloadFrames(); 
+    }
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [id, isTableProject, isMobile]);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+      setShowBackToTop(window.scrollY > window.innerHeight);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // --- 事件处理 ---
+  const handleNavClick = (path, e) => {
+    e.preventDefault(); 
+    window.scrollTo(0, 0); 
+    navigate(path);
+  };
+  
+  const handleBackToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   if (!project) return <div>Project Not Found</div>
 
-  // 拆分素材：Hero 是第一个，Gallery 是剩下的
-  const heroMedia = project.media[0]
-  const galleryMedia = project.media.slice(1)
+  // ==========================================
+  // 渲染逻辑分支
+  // ==========================================
 
-  const renderMediaItem = (item, index, isHero = false) => {
-    if (item.type === 'video') {
-      return (
-        <video 
-          key={index} className="media-content"
-          controls autoPlay={isHero} muted={isHero} loop playsInline src={item.src}
-        />
-      )
+  // --- 渲染器 A: 普通模式内容块 (Legacy) ---
+  const renderLegacyContentBlock = (block, index) => {
+    if (block.type === 'text') {
+      return <p key={index} className="project-paragraph">{block.value}</p>;
     }
-    return (
-      <img 
-        key={index} className="media-content"
-        src={item.src} alt={`${project.title} detail`} loading="lazy"
-      />
-    )
-  }
+    if (block.type === 'image') {
+      return (
+        <div key={index} className="gallery-item-inline">
+          <img 
+            src={block.src} 
+            alt={block.caption || 'Detail'} 
+            className="media-content-inline"
+            onClick={() => setPreviewModal({ type: 'image', src: block.src })} 
+          />
+          {block.caption && <span className="caption-inline">{block.caption}</span>}
+        </div>
+      );
+    }
+    return null;
+  };
 
+  // --- 渲染器 B: 杂志模式区块 (New Magazine Sections) ---
+  const renderMagazineSection = (section, index) => {
+    switch (section.type) {
+      // 1. 分栏洞察 (Insight)
+      case 'split-insight':
+        return (
+            <section key={index} className={`mag-section ${section.bgColor || ''}`}>
+                <div className="mag-split-layout">
+                    <div className="mag-split-left">
+                        <h2 className="section-title">{section.left.title}</h2>
+                        <div className="big-quote">{section.left.quote}</div>
+                        <p className="desc-text">{section.left.text}</p>
+                    </div>
+                    <div className="mag-split-right">
+                        <img src={section.right.image} alt="Insight" onClick={() => setPreviewModal({type:'image', src:section.right.image})} />
+                    </div>
+                </div>
+            </section>
+        );
+
+      // 2. Z字形特性 (Feature Z)
+      case 'feature-z':
+        return (
+            <section key={index} className={`mag-section ${section.bgColor || ''}`}>
+                <div className={`mag-feature-z ${section.layout === 'image-text' ? 'reverse' : ''}`}>
+                    <div className="mag-z-text">
+                        <h2>{section.title}</h2>
+                        <p>{section.text}</p>
+                    </div>
+                    <div className="mag-z-media">
+                        <img src={section.image} alt={section.title} onClick={() => setPreviewModal({type:'image', src:section.image})} />
+                    </div>
+                </div>
+            </section>
+        );
+
+      // 3. 全宽黑底 (Full Width Dark)
+      case 'full-width-dark':
+        return (
+            <div key={index} className="mag-full-dark">
+                <div className="mag-dark-content">
+                    <h2>{section.title}</h2>
+                    <p>{section.text}</p>
+                    <img src={section.image} alt="Tech" onClick={() => setPreviewModal({type:'image', src:section.image})} />
+                </div>
+            </div>
+        );
+
+      // 4. 全宽生活图 (Full Width Image)
+      case 'full-width-image':
+        return (
+            <div key={index} className="mag-full-image">
+                <img src={section.image} alt="Lifestyle" />
+                {section.caption && <div className="mag-image-caption">{section.caption}</div>}
+            </div>
+        );
+case 'carousel':
+        return (
+            <section key={index} className={`mag-section ${section.bgColor || ''}`}>
+                {/* 如果有标题，显示标题 */}
+                {section.title && (
+                    <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                        <h2 className="section-title" style={{ fontSize: '1.8rem', color: '#111' }}>
+                            {section.title}
+                        </h2>
+                        {section.text && <p style={{ color: '#666' }}>{section.text}</p>}
+                    </div>
+                )}
+                
+                {/* 调用已有的轮播组件 */}
+                <div style={{ width: '100vw', marginLeft: '50%', transform: 'translateX(-50%)' }}>
+                    <HorizontalCarousel media={section.items} />
+                </div>
+            </section>
+        );
+      default:
+        return null;
+    }
+  };
+
+  // ==========================================
+  // 主视图 (Main View)
+  // ==========================================
   return (
     <div className="editorial-layout">
       
-      {/* 1. 极简导航 (仿截图右上角的 clean feel) */}
-      <div className="back-nav-container">
-        <button className="text-link-btn" onClick={() => navigate('/')}>
-          ← Back to Portfolio
-        </button>
-      </div>
+      {/* 1. 顶部导航 (通用) */}
+      <nav className={`top-navbar ${isScrolled ? 'scrolled' : ''}`}>
+        <div className="nav-left">
+          <button className="nav-logo text-link-btn" onClick={(e) => handleNavClick("/", e)}>
+            王景馯 PORTFOLIO
+          </button>
+        </div>
+        <div className="nav-links">
+          {['graduation', 'course', 'sketch', 'other'].map(tab => (
+             <button key={tab} className="text-link-btn" onClick={(e) => handleNavClick(`/?tab=${tab}`, e)}>
+               {tab === 'graduation' ? '毕业设计' : tab === 'course' ? '课程作业' : tab === 'sketch' ? '手绘草图' : '其他项目'}
+             </button>
+          ))}
+        </div>
+      </nav>
 
-      {/* 2. 顶部标题区 (Centered Header) */}
-      <header className="project-header">
-        <span className="project-label">PROJECT</span>
-        <h1 className="project-title">{project.title}</h1>
-        <p className="project-subtitle">Project Work in cooperation with Mentors</p>
-      </header>
+      <button className={`back-to-top-btn ${showBackToTop ? 'visible' : ''}`} onClick={handleBackToTop}>↑</button>
 
-      {/* 3. Hero Section (全宽首图/视频) */}
-      {heroMedia && (
-        <section className="hero-wrapper">
-          {renderMediaItem(heroMedia, 'hero', true)}
-        </section>
+      {/* =======================================================
+          🚀 分支 A: 杂志模式 (Magazine Mode - for LUMENA etc.) 
+         ======================================================= */}
+      {isMagazineMode ? (
+        <div className="magazine-container">
+            {/* A1. 全屏 Hero */}
+            <div className="mag-hero">
+               {project.hero?.video ? (
+        <video 
+            className="mag-hero-bg" 
+            src={project.hero.video} 
+            autoPlay 
+            muted 
+            loop 
+            playsInline // 必须加，否则手机上会自动全屏弹窗
+            style={{ objectFit: 'cover' }} // 确保填满屏幕
+        />
+    ) : (
+        <img className="mag-hero-bg" src={project.hero?.image || project.coverImage} alt="Cover" />
+    )}
+
+    <div className="mag-hero-overlay"></div>
+                <div className="mag-hero-content">
+                  <h1 className="mag-hero-title">{project.hero?.title || project.title}</h1>
+               <div className="mag-hero-subtitle">
+           {project.hero?.subtitle.split('|').map((part, index) => (
+            <React.Fragment key={index}>
+                {index > 0 && <br className="mobile-break" />}
+                {part.trim()}
+            </React.Fragment>
+            ))}
+    </div>
+                  {project.hero?.tags && (
+                        <div className="mag-hero-tags">
+                            {project.hero.tags.map(tag => <span key={tag} className="mag-tag">{tag}</span>)}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* A2. 信息条 (Metadata) */}
+            <div className="mag-meta-bar">
+                <div className="mag-meta-item">
+                    <h4>Year</h4>
+                    <p>{project.year}</p>
+                </div>
+                <div className="mag-meta-item">
+                    <h4>Category</h4>
+                    <p>{project.category}</p>
+                </div>
+                {project.metadata?.role && (
+                    <div className="mag-meta-item">
+                        <h4>Role</h4>
+                        <p>{project.metadata.role}</p>
+                    </div>
+                )}
+                {/* ▼▼▼ 修改这里: 将原来的 map 部分替换为下面的代码 ▼▼▼ */}
+                {project.metadata?.awards && (
+                    <div className="mag-meta-item">
+                        <h4>Awards</h4>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {project.metadata.awards.map((award, idx) => (
+                                <button 
+                                    key={idx} 
+                                    className="mag-award-btn" // 新增一个类名用于写样式
+                                    onClick={() => setPreviewModal({ type: 'image', src: award.cert })}
+                                >
+                                    {award.name}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                {/* ▲▲▲ 修改结束 ▲▲▲ */}
+            </div>
+
+            {/* A3. 核心区块渲染 */}
+            <div className="mag-body">
+                {project.sections.map((section, idx) => renderMagazineSection(section, idx))}
+            </div>
+
+            {/* A4. 底部留白 */}
+            <div style={{ height: '100px', backgroundColor: '#f8f8f8' }}></div>
+        </div>
+
+      ) : (
+        /* =======================================================
+           📦 分支 B: 普通模式 (Legacy Mode - 侧边栏布局) 
+           ======================================================= */
+        <>
+            <div className="back-nav-container">
+                <button className="text-link-btn" onClick={(e) => handleNavClick("/", e)}>← Back to Portfolio</button>
+            </div>
+
+            <header className="project-header">
+                <span className="project-label">PROJECT</span>
+                <h1 className="project-title">{project.title}</h1>
+                <p className="project-subtitle">
+                    {project.subtitle || 'Project Work'}
+                </p>
+            </header>
+
+            {/* Hero 渲染 (ID 1 特殊处理) */}
+            {isTableProject ? (
+                isMobile ? (
+                    <section className="hero-wrapper" style={{ height: 'auto' }}>
+                        <video className="media-content" src={project.mobileHeroVideo} autoPlay muted loop playsInline />
+                    </section>
+                ) : <ScrollHero isMobile={isMobile} />
+            ) : (
+                (project.coverImage || (project.media?.[0]?.src)) && (
+                <section className="hero-wrapper">
+                    <img 
+                        className="media-content" 
+                        src={project.coverImage || project.media[0].src} 
+                        alt="hero" 
+                        style={{ borderRadius: 0, width: '100%', height: 'auto', display: 'block' }} 
+                    />
+                </section>
+                )
+            )}
+
+            <div className="content-body">
+                {/* 侧边栏 */}
+                <aside className="sticky-sidebar">
+                    <div className="category-box">
+                        <span className="category-label">{project.enTitle}</span>
+                        <h3 className="category-name">{project.title}</h3>
+                    </div>
+                    <div className="meta-info">
+                        <div className="meta-item"><span className="label">Year:</span><span className="value">{project.year}</span></div>
+                        <div className="meta-item"><span className="label">Category:</span><span className="value">{project.category}</span></div>
+                        {project.awards?.length > 0 && (
+                        <div className="meta-item">
+                            <span className="label">Awards:</span>
+                            <div className="awards-list">
+                            {project.awards.map((award, idx) => (
+                                <button key={idx} className="award-link-btn" onClick={() => setPreviewModal({ type: 'image', src: award.cert })}>
+                                {award.name}
+                                </button>
+                            ))}
+                            </div>
+                        </div>
+                        )}
+                        {project.resources?.length > 0 && (
+                        <div className="meta-item">
+                            <span className="label">Resources:</span>
+                            <div className="awards-list">
+                            {project.resources.map((res, idx) => (
+                                <button key={idx} className="award-link-btn" onClick={() => setPreviewModal({ type: res.type, src: res.src })}>
+                                {res.name}
+                                </button>
+                            ))}
+                            </div>
+                        </div>
+                        )}
+                    </div>
+                </aside>
+
+                {/* 右侧主内容 */}
+                <main className="main-scroll-content">
+                    {project.carouselItems && project.carouselItems.length > 0 && (
+                        <div style={{ marginBottom: '60px' }}>
+                            <HorizontalCarousel media={project.carouselItems} />
+                        </div>
+                    )}
+
+                    <div className="text-block">
+                        <h2 className="section-title">PROJECT INTRODUCTION</h2>
+                        {project.contentBlocks ? (
+                            project.contentBlocks.map((block, index) => renderLegacyContentBlock(block, index))
+                        ) : Array.isArray(project.desc) ? (
+                            project.desc.map((p, i) => <p key={i} className="project-paragraph">{p}</p>)
+                        ) : (
+                            <p className="project-paragraph" style={{whiteSpace: 'pre-wrap'}}>{project.desc}</p>
+                        )}
+                    </div>
+                    
+                    {/* 旧版画廊 */}
+                    {project.media && project.media.length > 0 && !project.carouselItems && (
+                        <div className="vertical-gallery">
+                            {project.media.slice(isTableProject ? 0 : 1).map((item, index) => (
+                                <div key={index} className="gallery-item">
+                                    <img 
+                                        className="media-content" 
+                                        src={item.src} 
+                                        alt="detail" 
+                                        style={{width:'100%', borderRadius:'4px', cursor: 'pointer'}} 
+                                        onClick={() => setPreviewModal({ type: 'image', src: item.src })} 
+                                    />
+                                    <span className="caption">Fig. {index + 1} — {item.caption || 'Detail View'}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </main>
+            </div>
+        </>
       )}
 
-      {/* 4. 核心布局：左侧固定信息栏 + 右侧滚动内容 */}
-      <div className="content-body">
-        
-        {/* LEFT: Sticky Sidebar */}
-        <aside className="sticky-sidebar">
-          {/* 那个紫红色的方块 */}
-          <div className="category-box">
-            <span className="category-label">Institute</span>
-            <h3 className="category-name">Industrial Design</h3>
+      {/* 通用 Modal 弹窗 */}
+      {previewModal && (
+        <div className="cert-modal-overlay" onClick={() => setPreviewModal(null)}>
+          <div className="cert-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-modal-btn" onClick={() => setPreviewModal(null)}>×</button>
+            {previewModal.type === 'video' ? (
+                <video src={previewModal.src} controls autoPlay className="modal-video-content" />
+            ) : (
+                <img src={previewModal.src} alt="Preview" style={{ maxWidth: '100%', maxHeight: '80vh' }} />
+            )}
           </div>
-
-          {/* 项目元数据 */}
-          <div className="meta-info">
-            <div className="meta-item">
-              <span className="label">Project:</span>
-              <span className="value">Project work {project.year || '2024'}</span>
-            </div>
-            <div className="meta-item">
-              <span className="label">Design:</span>
-              <span className="value">王景馯</span>
-            </div>
-             <div className="meta-item">
-              <span className="label">Category:</span>
-              <span className="value">{project.category || 'Product Design'}</span>
-            </div>
-          </div>
-        </aside>
-
-        {/* RIGHT: Scrollable Content (Desc + Gallery) */}
-        <main className="main-scroll-content">
-          
-          {/* 文本描述 (仿截图的排版，第一段稍微大一点或斜体) */}
-          <div className="text-block">
-            <p className="intro-text">
-              In this project work, we are developing the {project.title}, a design aimed to solve real-world problems through structural rationality.
-            </p>
-            <p className="body-text">
-              {project.desc}
-            </p>
-          </div>
-
-          {/* 剩下的图片瀑布流 (直接接在文字下面) */}
-          <div className="vertical-gallery">
-            {galleryMedia.map((item, index) => (
-              <div key={index} className="gallery-item">
-                {renderMediaItem(item, index)}
-                <span className="caption">Fig. {index + 1} — Detail View</span>
-              </div>
-            ))}
-          </div>
-
-        </main>
-      </div>
-      
-      {/* 简单的底部留白 */}
-      <div style={{ height: '100px' }}></div>
+        </div>
+      )}
     </div>
   )
 }
 
-export default ProjectDetail
+export default ProjectDetail;

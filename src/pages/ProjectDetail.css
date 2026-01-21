@@ -1,21 +1,97 @@
+/* ==========================================================
+   ProjectDetail.css - 样式表 v2.0 (优化版)
+   ========================================================== */
+
+/* ----------------------------------------------------------
+   0. 变量定义 (Root)
+   ---------------------------------------------------------- */
 :root {
   --accent-color: #b01564; 
   --text-primary: #333333;
   --text-secondary: #666666;
   --bg-color: #ffffff;
-  --gray-bg: #f8f8f8; /* 稍微调亮了一点灰底，更干净 */
+  --gray-bg: #f8f8f8; 
 }
 
+/* ----------------------------------------------------------
+   1. 通用布局与字体
+   ---------------------------------------------------------- */
 .editorial-layout {
   max-width: 1440px;
   margin: 0 auto;
   background-color: var(--bg-color);
   color: var(--text-primary);
-  /* ✅ 字体栈核心：先英文衬线，后中文黑体 */
+  /* 字体栈：英文衬线 + 中文黑体 */
   font-family: 'Merriweather', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', sans-serif;
 }
 
-/* 1. Back Nav */
+/* Hero Media & Content通用图片/视频样式 */
+.media-content {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.hero-wrapper {
+  width: 100%;
+  background-color: var(--gray-bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+/* ----------------------------------------------------------
+   2. 导航栏 (Top Navbar & Logo)
+   ---------------------------------------------------------- */
+.top-navbar {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 40px; 
+    height: 60px; 
+    background-color: var(--bg-color); 
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; /* 确保 padding 不会造成 width 溢出 */
+}
+
+/* 滚动时加阴影和磨砂效果 */
+.top-navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(5px);
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px; 
+}
+
+.top-navbar .nav-links a {
+  text-decoration: none; 
+  color: #333; 
+  font-size: 16px; 
+  transition: color 0.3s;
+}
+
+.top-navbar .nav-links a:hover {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.top-navbar .nav-logo {
+  text-decoration: none; 
+  color: #000;
+  font-weight: bold;
+}
+
+/* Back Nav */
 .back-nav-container {
   padding: 30px 40px;
 }
@@ -25,23 +101,26 @@
   border: none;
   cursor: pointer;
   font-size: 0.85rem;
-  font-weight: 700; /* 加粗一点导航 */
+  font-weight: 700; 
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 1.5px; /* 字间距加大，显得高级 */
+  letter-spacing: 1.5px; 
   padding: 0;
   transition: color 0.2s;
-  font-family: 'Noto Sans SC', sans-serif; /* 导航这种功能性文字用纯黑体更好认 */
+  font-family: 'Noto Sans SC', sans-serif; 
 }
 
 .text-link-btn:hover {
   color: var(--accent-color);
 }
 
-/* 2. Header */
+
+/* ----------------------------------------------------------
+   3. 标题与描述
+   ---------------------------------------------------------- */
 .project-header {
   text-align: center;
-  padding: 40px 20px 80px; /* 增加底部留白 */
+  padding: 40px 20px 80px; 
   max-width: 900px;
   margin: 0 auto;
 }
@@ -49,7 +128,7 @@
 .project-label {
   display: block;
   font-size: 0.75rem;
-  color: var(--accent-color); /* 改用主题色 */
+  color: var(--accent-color); 
   letter-spacing: 3px;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -58,10 +137,9 @@
 }
 
 .project-title {
-  /* ✅ 这里会自动应用：英文Merriweather，中文Noto Sans SC */
   font-family: 'Merriweather', 'Noto Sans SC', serif;
-  font-size: 3.5rem; /* 标题加大 */
-  font-weight: 900; /* 最粗的字重 */
+  font-size: 3.5rem; 
+  font-weight: 900; 
   margin: 0 0 15px 0;
   color: #111;
   line-height: 1.2;
@@ -72,51 +150,77 @@
   font-size: 1rem;
   font-weight: 400;
   font-family: 'Merriweather', 'Noto Sans SC', serif;
-  font-style: italic; /* 斜体增加杂志感 */
+  font-style: italic; 
 }
 
-/* 3. Hero Media */
-.hero-wrapper {
-  width: 100%;
-  background-color: var(--gray-bg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 80px;
+.text-block {
+  max-width: 720px; 
+  margin-bottom: 100px;
 }
 
-.media-content {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
+
+
+/* 针对通过数组渲染的段落 */
+.project-paragraph {
+    font-size: 1.1em; /* 根据需要调整字体大小 */
+    line-height: 1.6;  /* 根据需要调整行高 */
+    margin-bottom: 1.0em; /* 这里调整段落的底部间距，可以设置为1.2em或20px等 */
+    color: #333; /* 根据你的设计调整颜色 */
 }
 
-/* 4. Layout */
+/* 如果还有其他项目使用单字符串渲染，可以为它们保留原有样式 */
+.project-desc-single {
+    /* 保持原有样式，或也调整 margin-bottom */
+    margin-bottom: 20px;
+    white-space: pre-wrap; /* 如果是单字符串且包含 \n\n，则保留 */
+}
+
+.section-title {
+    /* 假设 H2 的样式 */
+    font-family: 'Noto Sans SC', sans-serif; 
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+/* ----------------------------------------------------------
+   4. 内容布局 (Grid)
+   ---------------------------------------------------------- */
 .content-body {
   display: grid;
-  grid-template-columns: 280px 1fr; /* 左侧稍微窄一点 */
-  gap: 80px; /* 间距加大 */
+  grid-template-columns: 280px 1fr; /* 左侧侧边栏宽度，右侧内容区 */
+  gap: 80px; 
   padding: 0 60px;
   position: relative;
   max-width: 1300px;
   margin: 0 auto;
 }
 
-/* --- Sticky Sidebar --- */
+/* 建议在你的 ProjectDetail.css 中检查/添加 */
+.main-scroll-content {
+  /* ...原有样式 */
+  min-width: 0; /* ❗关键：允许 Flex/Grid 子项缩小到内容以下，防止被轮播图撑大 */
+  width: 100%;  /* 确保占满剩余空间 */
+}
+
+/* ----------------------------------------------------------
+   5. 侧边栏 (Sticky Sidebar)
+   ---------------------------------------------------------- */
 .sticky-sidebar {
   position: sticky;
-  top: 60px; 
+  top: 60px; /* 避开固定导航栏 */
   height: fit-content;
 }
 
 .category-box {
   background-color: var(--accent-color);
   color: white;
-  padding: 40px 30px; /* 增加内部填充 */
+  padding: 40px 30px; 
   margin-bottom: 40px;
   width: 100%;
-  box-sizing: border-box; /* 防止padding撑破宽度 */
+  box-sizing: border-box; 
 }
 
 .category-label {
@@ -137,9 +241,8 @@
   line-height: 1.1;
 }
 
-/* Meta Info */
 .meta-info {
-  border-top: 2px solid #f0f0f0; /* 线条稍微加粗 */
+  border-top: 2px solid #f0f0f0; 
   padding-top: 25px;
 }
 
@@ -160,52 +263,156 @@
 .meta-item .value {
   display: block;
   font-size: 1rem;
-  font-weight: 500; /* Noto Sans Medium */
+  font-weight: 500; 
   color: var(--text-primary);
-  font-family: 'Noto Sans SC', sans-serif; /* 信息参数建议纯黑体，清晰 */
+  font-family: 'Noto Sans SC', sans-serif; 
 }
 
-/* --- Right Content --- */
-.main-scroll-content {
-  padding-top: 10px;
-}
-
-.text-block {
-  max-width: 720px; /* 限制文字宽度，提升阅读体验 */
-  margin-bottom: 100px;
-}
-
-.intro-text {
-  color: var(--accent-color);
-  font-family: 'Merriweather', 'Noto Sans SC', serif;
-  font-weight: 400;
-  font-style: italic; /* 强调斜体 */
-  font-size: 1.25rem;
-  line-height: 1.8;
-  margin-bottom: 30px;
-  border-left: 4px solid #eee; /* 左侧加根淡淡的线装饰 */
-  padding-left: 20px;
-}
-
-.body-text {
-  font-family: 'Noto Sans SC', sans-serif; /* 正文用黑体，阅读不累 */
-  font-weight: 300; /* 用细一点的字重，显得精致 */
-  font-size: 1.05rem;
-  line-height: 2; /* 宽松的行高 */
-  color: #444;
-  text-align: justify;
-}
-
-/* Gallery */
-.vertical-gallery {
+/* 奖项按钮 */
+.awards-list {
   display: flex;
   flex-direction: column;
-  gap: 120px; /* 极大的间距，呼吸感 */
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.award-link-btn {
+  background: none;
+  border: none;
+  color: var(--accent-color); 
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.award-link-btn:hover {
+  color: #000;
+  font-weight: 500;
+}
+
+
+/* ----------------------------------------------------------
+   6. 混合画廊 (Horizontal & Vertical Gallery)
+   ---------------------------------------------------------- */
+
+/* A. 纵向画廊 (Vertical List) - 用于普通图片堆叠 */
+.vertical-gallery {
+    /* 🔥 关键修复：使其跨越侧边栏和主内容区域 */
+    grid-column: 1 / -1; 
+    
+    display: flex;
+    flex-direction: column;
+    gap: 120px; /* 极大的间距，呼吸感 */
+    padding-bottom: 5rem;
 }
 
 .gallery-item {
   width: 100%;
-  /* background-color: var(--gray-bg); 可选：是否要背景 */
+}
+
+
+/* B. 横向画廊 (Carousel) - 用于交互式轮播 */
+.horizontal-gallery-wrapper {
+  /* 🔥 关键修复：使其跨越侧边栏和主内容区域 */
+  grid-column: 1 / -1; 
+  width: 100%;
+  margin-bottom: 3rem; 
+  position: relative; /* 关键：为绝对定位的箭头创建定位上下文 */
+}
+
+/* 核心滚动容器 */
+.horizontal-gallery-track {
+  display: flex; 
+  overflow-x: scroll; 
+  scroll-snap-type: x mandatory; 
+  -webkit-overflow-scrolling: touch; 
+  /* 隐藏滚动条 */
+  scrollbar-width: none; 
+  -ms-overflow-style: none;  
+}
+.horizontal-gallery-track::-webkit-scrollbar {
+  display: none; 
+}
+
+/* 每个独立的 Slide 元素 */
+.gallery-item-slide {
+  flex: 0 0 100%; 
+  width: 100%; 
+  scroll-snap-align: center; 
+  box-sizing: border-box;
+  padding: 0; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 底部导航点容器 */
+.horizontal-gallery-dots {
+  display: flex;
+  justify-content: center; 
+  margin-top: 1.5rem;
+}
+
+/* 导航点按钮 */
+.dot-button {
+  background: #ccc;
+  border: none;
+  border-radius: 50%;
+  width: 8px; 
+  height: 8px;
+  margin: 0 6px;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  opacity: 0.6;
+}
+
+/* 激活状态的点 */
+.dot-button.active {
+  background: var(--accent-color); 
+  opacity: 1;
+  transform: scale(1.2); 
+}
+
+/* C. 横向画廊箭头按钮 */
+.arrow-button {
+  position: absolute;
+  top: 50%; 
+  transform: translateY(-50%);
+  z-index: 10; 
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s, opacity 0.3s;
+  border-radius: 50%; 
+  padding: 0;
+}
+
+.arrow-button:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.left-arrow {
+  left: 20px; 
+}
+
+.right-arrow {
+  right: 20px; 
+}
+
+.arrow-button.hidden {
+  opacity: 0;
+  pointer-events: none; /* 禁用点击 */
 }
 
 .caption {
@@ -217,19 +424,815 @@
   letter-spacing: 0.5px;
 }
 
-/* Mobile */
+/* ----------------------------------------------------------
+   7. 动画与工具 (Animation & Utility)
+   ---------------------------------------------------------- */
+
+/* 动画容器 */
+.scroll-animation-wrapper {
+    width: 100%;
+    background-color: #ffffff;
+    position: relative;
+}
+
+.table-animation-sticky-container {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.table-animation-frame {
+    width: 80%;
+    max-width: 1000px;
+    height: auto;
+    object-fit: contain;
+    transition: opacity 0.1s; /* 保持过渡 */
+}
+
+.animation-progress-label {
+    position: absolute;
+    bottom: 30px;
+    font-size: 0.8rem;
+    color: #999;
+    letter-spacing: 1px;
+}
+
+/* 跳过按钮 */
+.skip-animation-btn {
+    position: absolute;
+    bottom: 15%; 
+    z-index: 100;
+    padding: 10px 24px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none; 
+    transition: all 0.4s ease;
+}
+
+.skip-animation-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; 
+}
+
+.skip-animation-btn:hover {
+    background-color: #000;
+    transform: scale(1.05);
+}
+
+/* 返回顶部按钮 */
+.back-to-top-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    z-index: 999;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background-color: #1a1a1a;
+    color: #fff;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.back-to-top-btn.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+.back-to-top-btn:hover {
+    background-color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+/* 证书弹窗 (Lightbox) */
+.cert-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85); 
+  z-index: 9999; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.cert-modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+  background: transparent;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  cursor: default; 
+}
+
+.cert-modal-content img {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh; 
+  border-radius: 4px;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.close-modal-btn:hover {
+  opacity: 1;
+}
+
+/* ----------------------------------------------------------
+   8. 响应式布局 (Media Queries)
+   ---------------------------------------------------------- */
+
 @media (max-width: 1024px) {
   .content-body {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 侧边栏和主内容堆叠 */
     gap: 50px;
     padding: 0 24px;
+  }
+
+  .sticky-sidebar {
+    position: static; /* 取消粘性定位 */
   }
 
   .project-title {
     font-size: 2.5rem;
   }
+}
+
+/* 针对宽度小于 768px 的屏幕 (手机/小平板) */
+@media (max-width: 768px) {
   
-  .sticky-sidebar {
-    position: static;
+  .top-navbar {
+    padding: 0 20px; 
+  }
+  
+  .top-navbar .nav-links {
+    display: none; /* 隐藏分类链接 */
+  }
+
+  .arrow-button {
+    display: none; /* 隐藏横向画廊箭头 */
+  }
+
+  .close-modal-btn {
+    top: -40px;
+    right: 0;
+  }
+/* ✨ 1. 内容区左右内边距进一步收紧 */
+  .content-body {
+    padding: 0 16px; 
+  }
+  
+  /* ✨ 2. 缩小标题区域的上下内边距 */
+  .project-header {
+    padding: 20px 16px 40px;
+  }
+
+  /* ✨ 3. 核心修复：缩小垂直画廊（图片）之间的间距 */
+  .vertical-gallery {
+    gap: 40px; /* 从 120px 减小到更适合移动端的 40px */
+    padding-bottom: 3rem; /* 稍微减少底部间距 */
+  }
+  
+  /* ✨ 4. 调整图注和图片之间的间距 */
+  .caption {
+    margin-top: 8px; /* 从 15px 减小 */
+    font-size: 0.75rem; /* 字体略微缩小 */
+  }
+  
+  /* ✨ 5. 调整返回顶部按钮的位置和大小 */
+  .back-to-top-btn {
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
+
+/* 针对宽度在 769px - 960px 之间的屏幕 (平板横向或窄桌面) */
+@media (min-width: 769px) and (max-width: 960px) {
+  
+  .top-navbar {
+    padding: 0 20px;
+  }
+  
+  .nav-links {
+    gap: 12px;
+  }
+  
+  .top-navbar .nav-links a {
+    font-size: 14px;
+  }
+}
+/* 确保 sticky 容器占满视口 */
+.table-animation-sticky-container {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh; /* 强制全屏高度 */
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9; /* ☁️ 增加背景色，避免纯白背景下的割裂感 */
+}
+
+/* 进度条样式优化 */
+.animation-progress-label {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #999;
+}
+
+/* ProjectDetail.css - 添加的滚动锁定样式 */
+
+/* 当 body 包含这个类时，禁止垂直滚动 */
+body.scroll-lock {
+    overflow-y: hidden; 
+}
+
+/* 💻 电脑端动画容器样式 (确保其是粘性的) */
+.table-animation-sticky-container {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh; /* 确保容器占满视口高度 */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9; /* 建议提供一个背景色 */
+}
+
+/* 进度条样式 (可选，用于美化) */
+.animation-progress-label {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #999;
+    z-index: 10;
+}
+
+/* =========================================
+   图文穿插专用样式 (Inline Gallery)
+   ========================================= */
+
+/* 1. 图片容器：确保它不会比父元素宽 */
+.gallery-item-inline {
+    width: 100%;             /* 占满当前文本区域的宽度 */
+    max-width: 100%;         /* 严禁超出 */
+    margin: 40px 0;          /* 上下留白 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* 图片居中 */
+    box-sizing: border-box;  /* 包含 padding 也就是不会撑大盒子 */
+}
+
+/* 2. 图片本体：核心修复代码 */
+.media-content-inline {
+    width: 100%;             /* 尝试占满容器 */
+    max-width: 100%;         /* ✅ 关键：绝对不超过父容器宽度，防止溢出屏幕 */
+    height: auto;            /* 高度自适应，防止图片变形 */
+    
+    /* 可选：限制图片最大显示宽度，以免在超大屏幕上太大 */
+    /* max-width: 800px; */ 
+    
+    border-radius: 4px;
+    object-fit: contain;     /* 保证图片内容完整显示 */
+    display: block;
+}
+
+/* 3. 说明文字 */
+.caption-inline {
+    margin-top: 10px;
+    color: #888;
+    font-size: 0.9em;
+    text-align: center;
+    max-width: 100%;         /* 防止文字过长溢出 */
+    padding: 0 10px;         /* 移动端留点边距 */
+}
+
+/* =========================================
+   移动端适配 (Mobile Responsive)
+   ========================================= */
+
+/* 当屏幕宽度小于 880px (对应你 JS 中的移动端判断标准) 时 */
+@media screen and (max-width: 1024px) {
+    
+    /* 隐藏侧边栏里的粉色标题框 */
+    .sticky-sidebar .category-box {
+        display: none !important;
+    }
+
+    /* 确保下方的 Year/Category 等信息依然显示，且间距正常 */
+    .sticky-sidebar .meta-info {
+        margin-top: 0; /* 去掉原本可能因标题框存在的顶部间距 */
+    }
+}
+
+/* ==========================================================
+   ✨ MAGAZINE MODE STYLES (针对 LUMENA 等大项目的杂志布局)
+   ========================================================== */
+
+/* 1. 杂志模式容器：单栏流式布局，去除侧边栏限制 */
+.magazine-container {
+  width: 100%;
+  overflow-x: hidden; /* 防止全屏元素导致横向滚动条 */
+  background-color: #fff;
+}
+
+/* 2. 全屏 Hero 区域 */
+.mag-hero {
+  position: relative;
+  width: 100%;
+  height: 90vh; /* 占据90%屏幕高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mag-hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.mag-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* 轻微遮罩 */
+  z-index: 2;
+}
+
+.mag-hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  color: #fff;
+  padding: 0 20px;
+  max-width: 1000px;
+}
+
+.mag-hero-title {
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+  font-family: 'Merriweather', serif;
+}
+
+.mag-hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 2px;
+  opacity: 0.9;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.mag-hero-tags {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  
+  /* ✨ 核心修复：允许自动换行 */
+  flex-wrap: wrap; 
+  
+  /* 限制最大宽度，防止太宽显得散乱 */
+  max-width: 90%; 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 2. 单个标签样式：缩小字体，增加弹性 */
+.mag-tag {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  
+  /* ✨ 增加背景色：让文字更清晰（可选，但推荐） */
+  background-color: rgba(0, 0, 0, 0.2); 
+  backdrop-filter: blur(4px);
+}
+
+/* 3. 信息条 (Metadata Bar) - 替代原侧边栏 */
+.mag-meta-bar {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  padding: 60px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
+}
+
+.mag-meta-item h4 {
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.mag-meta-item p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* 4. 通用布局区块 */
+.mag-section {
+  padding: 100px 0;
+  max-width: 1200px; /* 核心内容最大宽度 */
+  margin: 0 auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+/* 5. 分栏布局 (Split Insight) */
+.mag-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.mag-split-left .big-quote {
+  font-family: 'Merriweather', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #000;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.mag-split-left .big-quote::before {
+  content: "“";
+  position: absolute;
+  left: -40px;
+  top: -20px;
+  font-size: 4rem;
+  color: var(--accent-color);
+  opacity: 0.3;
+}
+
+.mag-split-left .desc-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+}
+
+.mag-split-right img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* 6. Z字形布局 (Feature Z) */
+.mag-feature-z {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  margin-bottom: 60px;
+}
+
+.mag-feature-z.reverse {
+  flex-direction: row-reverse; /* 图片在左 */
+}
+
+.mag-z-text {
+  flex: 1;
+}
+
+.mag-z-text h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.mag-z-text p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #666;
+}
+
+.mag-z-media {
+  flex: 1.2; /* 图片稍微大一点 */
+}
+
+.mag-z-media img {
+  width: 100%;
+  border-radius: 12px;
+  /* 稍微增加一点高级的浮动感 */
+  box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+
+/* 7. 全宽黑底模式 (Dark Mode Breakout) */
+.mag-full-dark {
+  width: 100vw; /* 强制全屏宽度 */
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background-color: #050505;
+  color: #fff;
+  padding: 120px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mag-dark-content {
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+  /* padding: 0 40px; <-- 删除旧的，在大屏下40px没问题，但我们用响应式来控制 */
+  padding: 0 20px; /* 默认用小一点的 padding */
+  /* 增加这个属性防止内容溢出容器 */
+  box-sizing: border-box; 
+}
+
+.mag-dark-content h2 {
+  /* font-size: 2.5rem; <-- 删除旧的固定大尺寸 */
+  font-size: clamp(1.8rem, 5vw, 2.5rem); /* 使用 clamp 动态调整字体大小 */
+  color: #fff;
+  margin-bottom: 20px;
+  /* 防止长单词（虽然这里没有）撑破布局 */
+  word-wrap: break-word;
+}
+
+.mag-dark-content p {
+  font-size: 1.2rem;
+  color: #ccc;
+  max-width: 700px;
+  margin: 0 auto 60px;
+}
+
+.mag-dark-content img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+/* 8. 全宽生活图 (Full Width Image) */
+.mag-full-image {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 80vh; /* 高度定死或者自适应 */
+  overflow: hidden;
+}
+
+.mag-full-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 新增：将图片对齐到顶部中心，防止切头 */
+  object-position: top center; 
+}
+
+.mag-image-caption {
+  /* 1. 定位：居中悬浮 */
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  width: 100%; /* 占满宽度，方便居中 */
+  text-align: center;
+  
+  /* 2. 去除原有背景框 */
+  background: none; 
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+
+  /* 3. 字体样式：优雅的衬线体 */
+  font-family: 'Merriweather', serif; 
+  font-size: 1.5rem; /* 稍微大一点，更有气势 */
+  font-weight: 300; /* 纤细字重 */
+  font-style: italic; /* 斜体增加故事感 */
+  color: rgba(255, 255, 255, 0.95); /* 纯白略带一点透明 */
+  
+  /* 4. 关键：文字阴影，保证在亮色水面上也能看清 */
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5); 
+  
+  /* 5. 间距 */
+  letter-spacing: 1px;
+}
+/* 响应式调整 for Magazine Mode */
+@media (max-width: 768px) {
+  .mag-hero-title { font-size: 2.5rem; }
+  .mag-meta-bar { gap: 30px; padding: 40px 20px; justify-content: flex-start; }
+  
+  .mag-split-layout { grid-template-columns: 1fr; gap: 40px; }
+  .mag-split-left .big-quote { font-size: 1.5rem; }
+  
+  .mag-feature-z, .mag-feature-z.reverse { flex-direction: column; gap: 40px; }
+  
+  .mag-full-image {    height: 60vh;   }
+.mag-full-dark {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background-color: #050505;
+  color: #fff;
+  /* padding: 120px 0; <-- 删除旧的 */
+  padding-top: 120px; /* 只保留顶部内边距 */
+  padding-bottom: 0;  /* 底部内边距设为0，让图片紧贴底部 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mag-dark-content {
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+  /* margin-bottom: 60px; <-- 如果之前有这个，建议删除，用图片的 margin-top 控制间距 */
+}
+
+.mag-dark-full-img {
+    width: 100%; /* 撑满全宽 */
+    max-width: none; /* 取消最大宽度限制 */
+    display: block; /* 消除图片底部的默认间隙 */
+    margin-top: 80px; /* 在文字和图片之间增加一些间距 */
+    border-radius: 0; /* 去掉圆角，让边缘锐利贴合 */
+    object-fit: cover;
+    cursor: pointer;
+}
+.mag-image-caption {
+  /* 1. 定位 */
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* 2. 磨砂玻璃背景 */
+  background: rgba(0, 0, 0, 0.4); /* 半透明黑色 */
+  backdrop-filter: blur(10px);    /* 核心：背景模糊 */
+  -webkit-backdrop-filter: blur(10px); /* Safari 兼容 */
+  
+  /* 3. 极细边框增加精致感 */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  /* 4. 形状 */
+  border-radius: 4px; /* 小圆角，更硬朗 */
+  padding: 12px 30px;
+  white-space: nowrap;
+
+  /* 5. 字体样式 */
+  color: #fff;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 2px; /* 宽字距 */
+  text-transform: uppercase; /* 全大写 */
+}
+
+@media (max-width: 768px) {
+  .mag-image-caption {
+    width: 80%; /* 手机上不要撑满，留点边 */
+    white-space: normal; /* 允许换行 */
+    text-align: center;
+    bottom: 30px;
+  }
+}
+
+/* 修复奖项点击按钮样式 */
+.mag-award-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.2s;
+}
+
+.mag-award-btn:hover {
+  color: var(--accent-color); /* 或者你想要的悬停颜色 */
+}
+
+/* src/ProjectDetail.css 末尾添加 */
+
+/* 默认隐藏换行符 */
+.mobile-break {
+  display: none;
+}
+
+/* 在小屏幕下显示换行符 */
+@media (max-width: 768px) {
+  .mobile-break {
+    display: block;
+    content: "";
+    margin-top: 8px; /* 增加一点行间距 */
+  }
+/* 针对黑底模式在手机上的调整 */
+    .mag-full-dark {
+      /* padding: 80px 0; <-- 删除旧的 */
+      padding-top: 80px; /* 手机端顶部间距 */
+    }
+    
+    .mag-dark-content p {
+      font-size: 1rem;
+      /* margin-bottom: 40px; <-- 删除旧的 */
+    }
+
+    /* 手机端图片和文字的间距稍微小一点 */
+    .mag-dark-full-img {
+        margin-top: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+  .mag-hero-tags {
+    gap: 0.5rem; /* 间距缩小 */
+    margin-top: 1.5rem;
+  }
+  
+  .mag-tag {
+    font-size: 0.7rem; /* 字体再小一点 */
+    padding: 4px 12px; /* 内边距缩小 */
+    border: 1px solid rgba(255, 255, 255, 0.4); /* 边框细一点 */
   }
 }
