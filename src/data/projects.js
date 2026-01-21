@@ -273,12 +273,12 @@ coverImage: '/images/1.png',
             items: [
                 { 
                     type: 'image', 
-                    src: `${base}images/startup.1343.png`, 
+                    src: `${base}images/water/color_white.png`, 
                     caption: 'Classic White | 经典白 (Standard Edition)' 
                 },
                 { 
                     type: 'image', 
-                    src: `${base}images/startup.1407.png`, 
+                    src: `${base}images/water/color_black.png`, 
                     caption: 'Stealth Black | 隐形黑 (Pro Edition)' 
                 },
                 { 
