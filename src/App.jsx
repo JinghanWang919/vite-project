@@ -100,7 +100,7 @@ function HomePage() {
         {/* Header: 杂志风格化 */}
         <header className="site-header">
           <div className="header-top-label">PORTFOLIO 2025</div>
-          <h1 className="main-title">王景馯</h1>
+          <h1 className="main-title">王昊</h1>
           <p className="sub-title">工业设计 / 以人为本 / 构想未来</p>
         </header>
 
@@ -151,7 +151,7 @@ function HomePage() {
             
             <div className="status-right">
               <Link to="/changelog" className="changelog-link">
-                System Status: v3.6 (Stable)
+                System Status: v4.1 (Stable)
               </Link>
             </div>
           </div>

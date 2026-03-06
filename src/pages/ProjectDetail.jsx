@@ -1,10 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ProjectDetail.css';
 import HorizontalCarousel from "../components/HorizontalCarousel"; 
 import { projectData } from '../data/projects';
 import ScrollHero, { preloadFrames } from '../components/project-parts/ScrollHero';
 
+// ==========================================
+// ✨ 组件: 自动渐隐渐现轮播 (用于手绘展示等)
+// ==========================================
+const AutoFadeCarousel = ({ images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    // 如果只有一张图，不需要轮播
+    if (!images || images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 3000); // 3秒切换一次
+
+    return () => clearInterval(interval);
+  }, [images]);
+
+  if (!images || images.length === 0) return null;
+
+  return (
+    <div className="mag-fade-carousel">
+      {images.map((src, index) => (
+        <div key={index} className={`mag-fade-slide ${index === currentIndex ? 'active' : ''}`}>
+          <img src={src} alt={`Slide ${index}`} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ==========================================
+// 主组件 ProjectDetail
+// ==========================================
 const ProjectDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,8 +46,11 @@ const ProjectDetail = () => {
   const project = projectData.find((p) => p.id === Number(id));
   const isTableProject = project && project.id === 1; 
   
-  // 判断是否启用“杂志模式” (LUMENA 等新项目)
+  // 判断是否启用“杂志模式” (LUMENA, 手绘, Ripple等新项目)
   const isMagazineMode = Boolean(project?.sections);
+
+  // ✨ 判断是否为 Ripple 车灯项目 (ID: 4)
+  const isRippleProject = project?.id === 4;
 
   // --- 状态管理 ---
   const [previewModal, setPreviewModal] = useState(null); 
@@ -85,24 +121,109 @@ const ProjectDetail = () => {
   // --- 渲染器 B: 杂志模式区块 (New Magazine Sections) ---
   const renderMagazineSection = (section, index) => {
     switch (section.type) {
-      // 1. 分栏洞察 (Insight)
-      case 'split-insight':
+      
+      // ✨✨✨ Ripple Theme Exclusive Components (车灯项目专属) ✨✨✨
+      
+      // 1. 灵感对比 (Ripple Inspiration)
+      case 'ripple-inspiration':
         return (
-            <section key={index} className={`mag-section ${section.bgColor || ''}`}>
-                <div className="mag-split-layout">
-                    <div className="mag-split-left">
-                        <h2 className="section-title">{section.left.title}</h2>
-                        <div className="big-quote">{section.left.quote}</div>
-                        <p className="desc-text">{section.left.text}</p>
+            <section key={index} className="mag-section">
+                <div className="ripple-inspiration-container">
+                    <div className="ripple-text-block">
+                        <h2 className="section-title">{section.title}</h2>
+                        <h3>{section.subtitle}</h3>
+                        <p>{section.text}</p>
                     </div>
-                    <div className="mag-split-right">
-                        <img src={section.right.image} alt="Insight" onClick={() => setPreviewModal({type:'image', src:section.right.image})} />
+                    <div className="ripple-compare-stage">
+                        {/* Left: Inspiration */}
+                        <div className="ripple-orb" onClick={() => setPreviewModal({type:'image', src:section.items[0].src})}>
+                            <img src={section.items[0].src} alt="Inspiration" />
+                            <div className="ripple-orb-label">{section.items[0].label}</div>
+                        </div>
+                        {/* Middle: Connector */}
+                        <div className="ripple-connector"></div>
+                        {/* Right: Product */}
+                        <div className="ripple-orb" onClick={() => setPreviewModal({type:'image', src:section.items[1].src})}>
+                            <img src={section.items[1].src} alt="Product" />
+                            <div className="ripple-orb-label">{section.items[1].label}</div>
+                        </div>
                     </div>
                 </div>
             </section>
         );
 
-      // 2. Z字形特性 (Feature Z)
+      // 2. 结构展示 (Ripple Structure)
+      case 'ripple-structure':
+        return (
+            <section key={index} className="mag-section">
+                <div className="ripple-structure-layout">
+                    <h2 className="section-title">{section.title}</h2>
+                    <p style={{maxWidth:'600px', textAlign:'center', margin:'20px 0'}}>{section.text}</p>
+                    
+                    <img 
+                        src={section.image} 
+                        alt="Structure" 
+                        className="ripple-image-glow" 
+                        onClick={() => setPreviewModal({type:'image', src:section.image})}
+                    />
+                    
+                    <div className="ripple-tags">
+                        {section.features.map(f => <span key={f} className="ripple-tag">{f}</span>)}
+                    </div>
+                </div>
+            </section>
+        );
+
+      // 3. 颜色画廊 (Ripple Gallery)
+      case 'ripple-gallery':
+        return (
+            <section key={index} className="mag-section">
+                <h2 className="section-title">{section.title}</h2>
+                <div className="ripple-gallery-grid">
+                    {section.items.map((item, i) => (
+                    <div key={i} className="ripple-color-card">
+                        <div className="ripple-circle-img" style={{borderColor: item.color}}>
+                            <img src={item.src} alt={item.name} />
+                        </div>
+                        <span className="ripple-color-name">{item.name}</span>
+                    </div>
+                    ))}
+                </div>
+            </section>
+        );
+
+
+      // ✨✨✨ Standard Magazine Components ✨✨✨
+
+      // 4. 分栏洞察 (Insight)
+     case 'split-insight':
+        return (
+            <section key={index} className={`mag-section ${section.bgColor || ''}`}>
+                <div className="mag-split-layout">
+                    <div className="mag-split-left">
+                        {section.left.label && <span className="mag-label">{section.left.label}</span>}
+                        <h2 className="section-title">{section.left.title}</h2>
+                        {section.left.quote && <div className="big-quote">{section.left.quote}</div>}
+                        <p className="desc-text">{section.left.text}</p>
+                    </div>
+                    <div className="mag-split-right">
+                        {section.right.images ? (
+                            <AutoFadeCarousel images={section.right.images} />
+                        ) : (
+                            <img 
+                                src={section.right.image} 
+                                alt="Insight" 
+                                onClick={() => setPreviewModal({type:'image', src:section.right.image})} 
+                                style={{cursor: 'pointer'}}
+                            />
+                        )}
+                        {section.right.caption && <span className="caption">{section.right.caption}</span>}
+                    </div>
+                </div>
+            </section>
+        );
+
+      // 5. Z字形特性 (Feature Z)
       case 'feature-z':
         return (
             <section key={index} className={`mag-section ${section.bgColor || ''}`}>
@@ -118,7 +239,7 @@ const ProjectDetail = () => {
             </section>
         );
 
-      // 3. 全宽黑底 (Full Width Dark)
+      // 6. 全宽黑底 (Full Width Dark)
       case 'full-width-dark':
         return (
             <div key={index} className="mag-full-dark">
@@ -130,7 +251,7 @@ const ProjectDetail = () => {
             </div>
         );
 
-      // 4. 全宽生活图 (Full Width Image)
+      // 7. 全宽生活图 (Full Width Image)
       case 'full-width-image':
         return (
             <div key={index} className="mag-full-image">
@@ -138,10 +259,11 @@ const ProjectDetail = () => {
                 {section.caption && <div className="mag-image-caption">{section.caption}</div>}
             </div>
         );
-case 'carousel':
+
+      // 8. 水平轮播 (Carousel)
+      case 'carousel':
         return (
             <section key={index} className={`mag-section ${section.bgColor || ''}`}>
-                {/* 如果有标题，显示标题 */}
                 {section.title && (
                     <div style={{ textAlign: 'center', marginBottom: '40px' }}>
                         <h2 className="section-title" style={{ fontSize: '1.8rem', color: '#111' }}>
@@ -150,13 +272,182 @@ case 'carousel':
                         {section.text && <p style={{ color: '#666' }}>{section.text}</p>}
                     </div>
                 )}
-                
-                {/* 调用已有的轮播组件 */}
                 <div style={{ width: '100vw', marginLeft: '50%', transform: 'translateX(-50%)' }}>
                     <HorizontalCarousel media={section.items} />
                 </div>
             </section>
         );
+
+      // 9. Centered Stat (居中数据流)
+      case 'centered-stat':
+        return (
+            <section key={index} className="mag-section mag-centered-stat">
+                <span className="mag-label">{section.title}</span>
+                <p className="mag-stat-main-text">{section.mainText}</p>
+                <div className="mag-stat-grid">
+                    {section.stats.map((stat, i) => (
+                        <div key={i} className="mag-stat-item">
+                            <span className="mag-stat-value">{stat.value}</span>
+                            <span className="mag-stat-label">{stat.label}</span>
+                        </div>
+                    ))}
+                </div>
+            </section>
+        );
+
+      // 10. Bento Grid (便当盒网格)
+      case 'bento-grid':
+        return (
+            <section key={index} className="mag-section mag-bento-wrapper">
+                <h2 className="section-title" style={{textAlign:'center', marginBottom:'40px'}}>{section.title}</h2>
+                <div className="mag-bento-grid">
+                    {section.items.map((item, i) => (
+                        <div key={i} className={`mag-bento-card ${item.size}`}>
+                            {item.images ? (
+                                <AutoFadeCarousel images={item.images} />
+                            ) : (
+                                <img 
+                                    src={item.image} 
+                                    alt={item.title} 
+                                    onClick={() => setPreviewModal({type:'image', src:item.image})} 
+                                />
+                            )}
+                            <div className="mag-bento-info">
+                                <h3>{item.title}</h3>
+                                <p>{item.desc}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+        );
+
+      // 11. Contained Image (圆角大图)
+      case 'contained-image':
+        return (
+            <section key={index} className="mag-section mag-bento-wrapper">
+                {section.title && (
+                    <h2 className="section-title" style={{textAlign:'center', marginBottom:'40px'}}>
+                        {section.title}
+                    </h2>
+                )}
+                <div style={{ width: '100%', position: 'relative' }}>
+                    <img 
+                        src={section.image} 
+                        alt="Project Board" 
+                        onClick={() => setPreviewModal({type:'image', src:section.image})}
+                        style={{ 
+                            width: '100%', 
+                            height: 'auto', 
+                            borderRadius: '16px', 
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+                            display: 'block',
+                            cursor: 'zoom-in'
+                        }} 
+                    />
+                    {section.caption && (
+                        <p style={{ marginTop: '15px', color: '#888', textAlign: 'center', fontSize: '0.9rem' }}>
+                            {section.caption}
+                        </p>
+                    )}
+                </div>
+            </section>
+        );
+
+      // 12. Sticky Overlay (背景视差)
+      case 'sticky-overlay':
+        return (
+            <div key={index} className="mag-sticky-container">
+                <div className="mag-sticky-bg">
+                    <img src={section.image} alt="Background" />
+                </div>
+                <div className="mag-sticky-content">
+                    <div className="mag-floating-card">
+                        <h2>{section.overlayTitle}</h2>
+                        <p>{section.overlayText}</p>
+                    </div>
+                </div>
+            </div>
+        );
+
+      // 13. Masonry Gallery (瀑布流画廊)
+      case 'masonry-gallery':
+        return (
+            <section key={index} className="mag-masonry-wrapper">
+                {section.title && <h2 className="section-title" style={{textAlign:'center', marginBottom:'40px'}}>{section.title}</h2>}
+                <div className="mag-masonry-grid">
+                    {section.items.map((item, i) => (
+                        <div key={i} className="mag-masonry-item" onClick={() => setPreviewModal({type:'image', src:item.src})}>
+                            <img src={item.src} alt={item.caption} loading="lazy" />
+                            {item.caption && (
+                                <div className="mag-masonry-overlay">
+                                    <p>{item.caption}</p>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </section>
+        );
+
+      // 14. Infinite Marquee (无限滚动)
+      case 'infinite-marquee':
+        const rawItems = section.items || [];
+        if (rawItems.length === 0) return null;
+
+        const generateSeamlessLane = (sources) => {
+           let baseList = [];
+           while (baseList.length < 30) {
+               baseList = [...baseList, ...sources];
+           }
+           // 这里简单随机，如需完全一致可传入seed
+           const shuffled = baseList
+              .map(value => ({ value, sort: Math.random() }))
+              .sort((a, b) => a.sort - b.sort)
+              .map(({ value }) => value);
+           return [...shuffled, ...shuffled];
+        };
+
+        const { row1, row2, row3 } = useMemo(() => {
+            return {
+                row1: generateSeamlessLane(rawItems),
+                row2: generateSeamlessLane(rawItems),
+                row3: generateSeamlessLane(rawItems)
+            };
+        }, [rawItems]);
+
+        return (
+            <section key={index} className="mag-marquee-section">
+                <div className="mag-marquee-row">
+                    <div className="mag-marquee-track anim-scroll-left-slow">
+                        {row1.map((item, i) => (
+                            <div key={`r1-${i}`} className="mag-marquee-item" onClick={() => setPreviewModal({type:'image', src:item.src})}>
+                                <img src={item.src} alt="" loading="lazy" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="mag-marquee-row">
+                    <div className="mag-marquee-track anim-scroll-right-med">
+                        {row2.map((item, i) => (
+                            <div key={`r2-${i}`} className="mag-marquee-item" onClick={() => setPreviewModal({type:'image', src:item.src})}>
+                                <img src={item.src} alt="" loading="lazy" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="mag-marquee-row">
+                    <div className="mag-marquee-track anim-scroll-left-fast">
+                         {row3.map((item, i) => (
+                            <div key={`r3-${i}`} className="mag-marquee-item" onClick={() => setPreviewModal({type:'image', src:item.src})}>
+                                <img src={item.src} alt="" loading="lazy" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+
       default:
         return null;
     }
@@ -166,13 +457,14 @@ case 'carousel':
   // 主视图 (Main View)
   // ==========================================
   return (
-    <div className="editorial-layout">
+    // ✨ 动态添加 'ripple-theme-wrapper' 如果是 ID 4
+    <div className={`editorial-layout ${isRippleProject ? 'ripple-theme-wrapper' : ''}`}>
       
       {/* 1. 顶部导航 (通用) */}
       <nav className={`top-navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="nav-left">
           <button className="nav-logo text-link-btn" onClick={(e) => handleNavClick("/", e)}>
-            王景馯 PORTFOLIO
+            王昊 PORTFOLIO
           </button>
         </div>
         <div className="nav-links">
@@ -187,38 +479,39 @@ case 'carousel':
       <button className={`back-to-top-btn ${showBackToTop ? 'visible' : ''}`} onClick={handleBackToTop}>↑</button>
 
       {/* =======================================================
-          🚀 分支 A: 杂志模式 (Magazine Mode - for LUMENA etc.) 
+          🚀 分支 A: 杂志模式 (Magazine Mode) 
          ======================================================= */}
       {isMagazineMode ? (
         <div className="magazine-container">
             {/* A1. 全屏 Hero */}
             <div className="mag-hero">
                {project.hero?.video ? (
-        <video 
-            className="mag-hero-bg" 
-            src={project.hero.video} 
-            autoPlay 
-            muted 
-            loop 
-            playsInline // 必须加，否则手机上会自动全屏弹窗
-            style={{ objectFit: 'cover' }} // 确保填满屏幕
-        />
-    ) : (
-        <img className="mag-hero-bg" src={project.hero?.image || project.coverImage} alt="Cover" />
-    )}
+                    <video 
+                        className="mag-hero-bg" 
+                        src={project.hero.video} 
+                        autoPlay 
+                        muted 
+                        loop 
+                        playsInline 
+                        style={{ objectFit: 'cover' }} 
+                    />
+                ) : (
+                    <img className="mag-hero-bg" src={project.hero?.image || project.coverImage} alt="Cover" />
+                )}
 
-    <div className="mag-hero-overlay"></div>
-                <div className="mag-hero-content">
-                  <h1 className="mag-hero-title">{project.hero?.title || project.title}</h1>
-               <div className="mag-hero-subtitle">
-           {project.hero?.subtitle.split('|').map((part, index) => (
-            <React.Fragment key={index}>
-                {index > 0 && <br className="mobile-break" />}
-                {part.trim()}
-            </React.Fragment>
-            ))}
-    </div>
-                  {project.hero?.tags && (
+                <div className="mag-hero-overlay"></div>
+                
+                <div className={`mag-hero-content ${project.hero?.align === 'bottom-left' ? 'align-bottom-left' : ''}`}>
+                    <h1 className="mag-hero-title">{project.hero?.title || project.title}</h1>
+                    <div className="mag-hero-subtitle">
+                        {project.hero?.subtitle.split('|').map((part, index) => (
+                            <React.Fragment key={index}>
+                                {index > 0 && <br className="mobile-break" />}
+                                {part.trim()}
+                            </React.Fragment>
+                        ))}
+                    </div>
+                    {project.hero?.tags && (
                         <div className="mag-hero-tags">
                             {project.hero.tags.map(tag => <span key={tag} className="mag-tag">{tag}</span>)}
                         </div>
@@ -242,7 +535,6 @@ case 'carousel':
                         <p>{project.metadata.role}</p>
                     </div>
                 )}
-                {/* ▼▼▼ 修改这里: 将原来的 map 部分替换为下面的代码 ▼▼▼ */}
                 {project.metadata?.awards && (
                     <div className="mag-meta-item">
                         <h4>Awards</h4>
@@ -250,7 +542,7 @@ case 'carousel':
                             {project.metadata.awards.map((award, idx) => (
                                 <button 
                                     key={idx} 
-                                    className="mag-award-btn" // 新增一个类名用于写样式
+                                    className="mag-award-btn" 
                                     onClick={() => setPreviewModal({ type: 'image', src: award.cert })}
                                 >
                                     {award.name}
@@ -259,7 +551,6 @@ case 'carousel':
                         </div>
                     </div>
                 )}
-                {/* ▲▲▲ 修改结束 ▲▲▲ */}
             </div>
 
             {/* A3. 核心区块渲染 */}
@@ -268,12 +559,12 @@ case 'carousel':
             </div>
 
             {/* A4. 底部留白 */}
-            <div style={{ height: '100px', backgroundColor: '#f8f8f8' }}></div>
+            <div style={{ height: '100px', backgroundColor: isRippleProject ? 'transparent' : '#f8f8f8' }}></div>
         </div>
 
       ) : (
         /* =======================================================
-           📦 分支 B: 普通模式 (Legacy Mode - 侧边栏布局) 
+           📦 分支 B: 普通模式 (Legacy Mode) 
            ======================================================= */
         <>
             <div className="back-nav-container">
