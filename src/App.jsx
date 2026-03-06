@@ -146,7 +146,7 @@ function HomePage() {
           
           <div className="status-bar">
             <div className="status-left">
-              © 2025 Jinghan Wang. All Rights Reserved.
+              © 2025 HaoWang. All Rights Reserved.
             </div>
             
             <div className="status-right">

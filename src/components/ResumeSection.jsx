@@ -33,7 +33,7 @@ const ResumeSection = () => {
         <div className="resume-info">
           {/* ... header, body 等内容保持不变 ... */}
           <div className="resume-header">
-            <h2 className="resume-name">王景馯</h2>
+            <h2 className="resume-name">王昊</h2>
             <p className="resume-title">工业设计 / Industrial Design</p>
             
             <div className="resume-contact">
